@@ -1,0 +1,39 @@
+###Obtener listado de salas
+GET http://localhost:3001/api/sala
+
+
+### Sube sala
+POST http://localhost:3001/api/sala
+Content-Type: application/json  
+
+{
+  "NumSala": 2,
+  "Capacidad": 150,
+  "TipoPantalla": "3D",
+  "TipoAsientos": "Reclinables"
+}
+
+### Modificar sala
+PUT http://localhost:3001/api/sala/2 
+Content-Type: application/json
+
+{
+  "NumSala": 2,
+  "Capacidad": 120,
+  "TipoPantalla": "3D",
+  "TipoAsientos": "Reclinables"
+}
+
+
+### Modificar sala
+PATCH http://localhost:3001/api/sala/1 
+Content-Type: application/json
+
+{
+  "NumSala": 1,
+  "TipoPantalla": "3D",
+  "TipoAsientos": "SuperSeat"
+}
+
+###Borrar
+DELETE http://localhost:3001/api/sala/2
