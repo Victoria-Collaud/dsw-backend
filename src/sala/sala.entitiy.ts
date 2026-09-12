@@ -1,11 +1,13 @@
+import { ObjectId } from "mongodb";
 
 export class Sala {
     constructor(
         public NumSala: number,
         public Capacidad: number,
         public TipoPantalla: string,
-        public TipoAsientos: string
-    ) {}
+        public TipoAsientos: string,
+        public  _id?: ObjectId,  
+    ) {} 
 }
 
 //insert data

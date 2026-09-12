@@ -12,32 +12,37 @@ const SalaInstances = [
 
 export class SalaRepository implements Repository<Sala> {
 
-public  findAll(): Sala[] | undefined  {
-    return SalaInstances; 
+public async findAll(): Promise< Sala[] | undefined > {
+    return await SalaInstances; 
 }
-public findOne(item: {NumSala:number;}): Sala | undefined {
-    return SalaInstances.find((sala) => sala.NumSala === item.NumSala);
+public async findOne(item: {NumSala:number;}): Promise<Sala | undefined >{
+    return await SalaInstances.find((sala) => sala.NumSala === item.NumSala);
   }
-public add(item: Sala): Sala | undefined {
+public async add(item: Sala): Promise< Sala | undefined> {
+    const existingSala = SalaInstances.find((sala) => sala.NumSala === item.NumSala)
+    if (existingSala) {
+        return undefined
+    }
+
     SalaInstances.push(item);
-    return item;
+    return await item;
   }
-public update(item: Sala): Sala | undefined {
-    const salaidx = SalaInstances.findIndex((sala) => sala.NumSala === item.NumSala)
+public async update(id: string, item: Sala): Promise<Sala | undefined> {
+    const salaidx = SalaInstances.findIndex((sala) => sala.NumSala === Number(id))
         if (salaidx !== -1) {
             SalaInstances[salaidx] = {...SalaInstances[salaidx], ...item }
         }
-        return SalaInstances[salaidx]
+        return await SalaInstances[salaidx]
     }
 
-public delete(item: {NumSala:number;}): Sala | undefined {
+public async delete(item: {NumSala:number;}): Promise< Sala | undefined>{
     
 const salaidx = SalaInstances.findIndex((sala) => sala.NumSala === item.NumSala) 
   
     if(salaidx !== -1) {    
         const deletedsala = SalaInstances[salaidx]
             SalaInstances.splice(salaidx, 1)
-        return deletedsala
+        return await deletedsala
     }
   }
 
