@@ -1,49 +1,40 @@
 import { Repository } from "../shared/repository.js";
 import { Sala } from './sala.entitiy.js';
+import{db} from '../shared/db/conn.js'
+import { ObjectId } from "mongodb";
 
-
-const SalaInstances = [
+const SalaInstancesArray = [
     new Sala(
         1,
         100, 
         "2D", 
         "Reclinables"),] 
 
+const SalaInstances = db.collection<Sala>('salas')
 
 export class SalaRepository implements Repository<Sala> {
-
-public async findAll(): Promise< Sala[] | undefined > {
-    return await SalaInstances; 
+public async findAll(): Promise<Sala[] | undefined> {
+    return await SalaInstances.find().toArray()
 }
-public async findOne(item: {NumSala:number;}): Promise<Sala | undefined >{
-    return await SalaInstances.find((sala) => sala.NumSala === item.NumSala);
-  }
+
+public async findOne(item: { id: string }): Promise<Sala | undefined> {
+    const _id = new ObjectId(item.id)
+    return (await SalaInstances.findOne({ _id })) || undefined
+ }
 public async add(item: Sala): Promise< Sala | undefined> {
-    const existingSala = SalaInstances.find((sala) => sala.NumSala === item.NumSala)
-    if (existingSala) {
-        return undefined
-    }
-
-    SalaInstances.push(item);
-    return await item;
+     item._id = (await SalaInstances.insertOne(item)).insertedId
+    return item
   }
-public async update(id: string, item: Sala): Promise<Sala | undefined> {
-    const salaidx = SalaInstances.findIndex((sala) => sala.NumSala === Number(id))
-        if (salaidx !== -1) {
-            SalaInstances[salaidx] = {...SalaInstances[salaidx], ...item }
-        }
-        return await SalaInstances[salaidx]
-    }
-
-public async delete(item: {NumSala:number;}): Promise< Sala | undefined>{
-    
-const salaidx = SalaInstances.findIndex((sala) => sala.NumSala === item.NumSala) 
   
-    if(salaidx !== -1) {    
-        const deletedsala = SalaInstances[salaidx]
-            SalaInstances.splice(salaidx, 1)
-        return await deletedsala
-    }
-  }
+public async update(id: string, item: Sala): Promise<Sala | undefined> {
+    const _id = new ObjectId(id)
+    return (await SalaInstances.findOneAndUpdate({ _id }, { $set: item }, { returnDocument: 'after' })) || undefined
+}
+
+
+public async delete(item: { id: string}): Promise< Sala | undefined>{
+    const _id = new ObjectId(item.id)
+    return (await SalaInstances.findOneAndDelete({  _id  })) || undefined
+}
 
 }

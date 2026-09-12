@@ -14,7 +14,7 @@ Content-Type: application/json
 }
 
 ### Modificar sala
-PUT http://localhost:3001/api/sala/2 
+PUT http://localhost:3001/api/sala/2p 
 Content-Type: application/json
 
 {

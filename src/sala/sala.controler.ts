@@ -25,8 +25,7 @@ async function findAll (req:Request, res:Response) {
 } 
 
 async function findOne(req:Request, res:Response) {
-    const NumSala = req.params.NumSala
-    const sala = await repository.findOne({NumSala: Number(NumSala)})
+  const sala = await repository.findOne({ id: String(req.params.id) })
 if (!sala){
     return res.status(404).send({ message: 'La sala no existe' })
      }
@@ -42,19 +41,14 @@ async function add (req:Request, res:Response) {
         input.TipoPantalla, 
         input.TipoAsientos)
         
-    const sala = await repository.add(Salainput)
-    if (!sala) {
-      return res.status(409).send({ message: 'Ya existe una sala con ese número' })
-    }
-
-    return res.status(201).send({ message: 'Sala creada correctamente', data: sala })
+    const sala = await   repository.add(Salainput)
+     return res.status(201).send({ message: 'Sala creada correctamente', data: sala }) 
 } 
 
 
 //Busca y modifica sala totalmente
 async function update (req:Request, res:Response) { 
-    req.body.sanitizedInput.NumSala = Number(req.params.NumSala)
-  const sala = await repository.update(String(req.params.NumSala), req.body.sanitizedInput)
+  const sala = await repository.update(String(req.params.id), req.body.sanitizedInput)
     
     if (!sala) { 
        return res.status(404).send({ message: 'La sala no existe' } )
@@ -66,8 +60,7 @@ async function update (req:Request, res:Response) {
 
 //Borra
 async function remove(req: Request, res: Response) {
-    const NumSala = req.params.NumSala
-    const sala = await repository.delete({NumSala:Number(NumSala)})
+  const sala = await repository.delete({ id: String(req.params.id) })
     
   if(!sala){
     res.status(404).send( {  message:'sala no encontrada' } )
