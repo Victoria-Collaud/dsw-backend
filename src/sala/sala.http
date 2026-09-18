@@ -1,6 +1,8 @@
 ###Obtener listado de salas
 GET http://localhost:3001/api/sala
 
+###Obtener una sala
+GET http://localhost:3001/api/sala/1
 
 ### Sube sala
 POST http://localhost:3001/api/sala

@@ -25,7 +25,7 @@ async function findAll (req:Request, res:Response) {
 } 
 
 async function findOne(req:Request, res:Response) {
-  const sala = await repository.findOne({ id: String(req.params.id) })
+  const sala = await repository.findOne({ NumSala: Number(req.params.id) })
 if (!sala){
     return res.status(404).send({ message: 'La sala no existe' })
      }

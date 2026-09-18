@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+//import { ObjectId } from "mongodb";
 
 export class Sala {
     constructor(
@@ -6,7 +6,7 @@ export class Sala {
         public Capacidad: number,
         public TipoPantalla: string,
         public TipoAsientos: string,
-        public  _id?: ObjectId,  
+        //public id?: number  
     ) {} 
 }
 
