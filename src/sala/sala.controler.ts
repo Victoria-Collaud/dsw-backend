@@ -48,7 +48,7 @@ async function add (req:Request, res:Response) {
 
 //Busca y modifica sala totalmente
 async function update (req:Request, res:Response) { 
-  const sala = await repository.update(String(req.params.id), req.body.sanitizedInput)
+  const sala = await repository.update(Number(req.params.id), req.body.sanitizedInput)
     
     if (!sala) { 
        return res.status(404).send({ message: 'La sala no existe' } )
@@ -60,7 +60,7 @@ async function update (req:Request, res:Response) {
 
 //Borra
 async function remove(req: Request, res: Response) {
-  const sala = await repository.delete({ id: String(req.params.id) })
+  const sala = await repository.delete({ NumSala: Number(req.params.id) })
     
   if(!sala){
     res.status(404).send( {  message:'sala no encontrada' } )

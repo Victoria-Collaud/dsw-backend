@@ -3,6 +3,7 @@ import { Sala } from './sala.entitiy.js';
 //import{db} from '../shared/db/conn.js'
 //import { ObjectId } from "mongodb";
 import {pool} from '../shared/db/conn.mysql.js'
+import { ResultSetHeader } from "mysql2";
 
 //const SalaInstancesArray = [
 //    new Sala(
@@ -31,17 +32,38 @@ public async findOne(item: { NumSala: number }): Promise<Sala | undefined> {
    return sala }
 
 public async add(item: Sala): Promise< Sala | undefined> {
-    // item._id = (await SalaInstances.insertOne(item)).insertedId
-   // return item
-  throw new Error ('No implementado')}
-  
-public async update(id: string, item: Sala): Promise<Sala | undefined> {
- //   const _id = new ObjectId(id)
- //   return (await SalaInstances.findOneAndUpdate({ _id }, { $set: item }, { returnDocument: 'after' })) || undefined
-throw new Error ('No implementado')}
+   const { NumSala, Capacidad, TipoPantalla, TipoAsientos } = item
+   const [result] = await pool.query<ResultSetHeader>('Insert into salas set ?', [{ NumSala, Capacidad, TipoPantalla, TipoAsientos }])
+   item.NumSala = result.insertId //id incremental
+   return item }
 
-public async delete(item: { id: string}): Promise< Sala | undefined>{
-   // const _id = new ObjectId(item.id)
-   // return (await SalaInstances.findOneAndDelete({  _id  })) || undefined
-throw new Error ('No implementado')}
+public async update(NumSala: number, salainput: Sala): Promise<Sala | undefined> { 
+  const numSala = Number(NumSala)
+   await pool.query('update salas set ? where NumSala = ?', [salainput, numSala])
+ return await this.findOne({ NumSala: numSala })
 }
+
+
+public async delete(item: { NumSala: number }): Promise< Sala | undefined>{
+  try {
+    const salaborrar = await this.findOne({ NumSala: Number(item.NumSala) })
+    const numSala = Number(item.NumSala)
+      await pool.query('delete from salas where NumSala = ?', numSala)
+      return salaborrar
+  } catch (error: any) { 
+   throw new Error('no se puede borrar la sala')
+  }
+}
+}
+/*  public async delete(item: { id: string }): Promise<Character | undefined> {
+    try {item.NumSala
+      const characterToDelete = await this.findOne(item)
+      const characterId = Number.parseInt(item.id)
+      await pool.query('delete from characterItems where characterId = ?', characterId)
+      await pool.query('delete from characters where id = ?', characterId)
+      return characterToDelete
+    } catch (error: any) {
+      throw new Error('unable to delete character')
+    }
+  }
+}*/

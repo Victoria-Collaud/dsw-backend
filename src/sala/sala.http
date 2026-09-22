@@ -9,14 +9,14 @@ POST http://localhost:3001/api/sala
 Content-Type: application/json  
 
 {
-  "NumSala": 2,
-  "Capacidad": 150,
-  "TipoPantalla": "3D",
+  "NumSala": 3,
+  "Capacidad": 10,
+  "TipoPantalla": "2D",
   "TipoAsientos": "Reclinables"
 }
 
 ### Modificar sala
-PUT http://localhost:3001/api/sala/2p 
+PUT http://localhost:3001/api/sala/2 
 Content-Type: application/json
 
 {
@@ -28,14 +28,14 @@ Content-Type: application/json
 
 
 ### Modificar sala
-PATCH http://localhost:3001/api/sala/1 
+PATCH http://localhost:3001/api/sala/2
 Content-Type: application/json
 
 {
-  "NumSala": 1,
+  "NumSala": 2,
   "TipoPantalla": "3D",
   "TipoAsientos": "SuperSeat"
 }
 
 ###Borrar
-DELETE http://localhost:3001/api/sala/2
+DELETE http://localhost:3001/api/sala/3
