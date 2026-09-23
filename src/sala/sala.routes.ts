@@ -1,5 +1,5 @@
 import{Router} from 'express';
-import {sanitizeSalaInput, findAll, findOne, add, update, remove} from './sala.controler.js';
+import { findAll, findOne, add, update, remove, sanitizeSalaInput} from './sala.controler.js';
 
 
 export const salarouter = Router()

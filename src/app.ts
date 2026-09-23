@@ -1,22 +1,26 @@
 import express from 'express';        
 import { salarouter } from './sala/sala.routes.js'
+import 'reflect-metadata'
+import { orm, syncSchema } from './shared/db/orm.js'
+import { RequestContext } from '@mikro-orm/core'
 
 const app = express();
 app.use(express.json())
 
-// app.use('/', (req, res) => {
-//    res.send('Ayudaaaa')
-// }); 
+//luego de los middlewares base
+app.use((req, res, next) => {
+  RequestContext.create(orm.em, next)
+})
+//antes de las rutas y middlewares de negocio
+app.use('/api/salas', salarouter)
 
-app.use('/api/sala', salarouter)
 
-
- 
 //avisa que la ruta no existe
 app.use ((_, res) => { 
     return res.status(404).send({ message: 'Ruta no encontrada' })
 } )
 
+await syncSchema() //never in production
 
 //Avisa que funciona (?)
 app.listen(3001, () => { 

@@ -1,10 +1,13 @@
-import  { Request, Response, NextFunction } from "express";
-import { SalaRepository } from "./sala.repository.js";
-import { Sala } from "./sala.entitiy.js";
+import  { Request, Response} from "express";
+//import { SalaRepository } from "./sala.repository.js";
+import { Sala } from "./sala.entity.js";
+import { orm } from "../shared/db/orm.js";
 
-const repository = new SalaRepository()
+const em = orm.em // entity manager
 
- function sanitizeSalaInput(req: Request, res: Response, next:NextFunction) {
+//const repository = new SalaRepository()
+
+ function sanitizeSalaInput(req: Request, res: Response, next:Function) { //era nextfunction
     req.body.sanitizedInput = {
         NumSala: req.body.NumSala,
         Capacidad: req.body.Capacidad,
@@ -20,55 +23,43 @@ const repository = new SalaRepository()
 next ()
 }
 
+
 async function findAll (req:Request, res:Response) {
-    res.json({data: await repository.findAll() })
-} 
+try {
+    const salas = await em.find(Sala, {})
+    res.status(200).json({ message: 'Listado de todas las salas', data: salas })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+}
+ 
 
 async function findOne(req:Request, res:Response) {
-  const sala = await repository.findOne({ NumSala: Number(req.params.id) })
-if (!sala){
-    return res.status(404).send({ message: 'La sala no existe' })
-     }
-     res.send({ data: sala }) };
+   res.status(500).send({ message: 'No implementado'}) };
 
 //Crea sala       
 async function add (req:Request, res:Response) { 
-    const input = req.body.sanitizedInput
-    
-    const Salainput = new Sala(
-        input.NumSala, 
-        input.Capacidad, 
-        input.TipoPantalla, 
-        input.TipoAsientos)
-        
-    const sala = await   repository.add(Salainput)
-     return res.status(201).send({ message: 'Sala creada correctamente', data: sala }) 
+      try {
+    const sala = em.create(Sala, req.body)
+    await em.flush()
+    res.status(201).json({ message: 'sala creada', data: sala })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 } 
 
 
 //Busca y modifica sala totalmente
 async function update (req:Request, res:Response) { 
-  const sala = await repository.update(Number(req.params.id), req.body.sanitizedInput)
-    
-    if (!sala) { 
-       return res.status(404).send({ message: 'La sala no existe' } )
-     }
-
-    return res.status(200).send({ message: 'Sala actualizada correctamente', data: sala })
+ res.status(500).send({ message: 'No implementado'})
 }
 
 
 //Borra
 async function remove(req: Request, res: Response) {
-  const sala = await repository.delete({ NumSala: Number(req.params.id) })
-    
-  if(!sala){
-    res.status(404).send( {  message:'sala no encontrada' } )
-  } else{
-    res.status(200).send({message:'sala eliminada correctamente'})
-  }
+  res.status(500).send({ message: 'No implementado'})
 }
 
 
 
-export {sanitizeSalaInput, findAll, findOne, add, update, remove} 
+export { findAll, findOne, add, update, remove, sanitizeSalaInput } 

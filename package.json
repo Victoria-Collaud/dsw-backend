@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p ./tsconfig.json",
-    "start:dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node --env-file=.env ./dist/app.js\"" 
+    "start:dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node --env-file=.env ./dist/app.js\""
   },
   "keywords": [],
   "author": "",
@@ -26,9 +26,11 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "e": "^0.2.33",
+    "@mikro-orm/core": "7.2.1",
+    "@mikro-orm/decorators": "7.2.1",
+    "@mikro-orm/mysql": "7.2.1",
+    "@mikro-orm/sql-highlighter": "1.0.1",
     "express": "^5.2.1",
-    "mongodb": "7.6.0",
-    "mysql2": "3.24.4"
+    "reflect-metadata": "0.2.2"
   }
 }
