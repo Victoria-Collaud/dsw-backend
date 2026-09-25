@@ -2,7 +2,7 @@
 GET http://localhost:3001/api/salas
 
 ###Obtener una sala
-GET http://localhost:3001/api/salas/1
+GET http://localhost:3001/api/salas/2
 
 ### Sube sala
 POST http://localhost:3001/api/salas

@@ -4,7 +4,7 @@ import { findAll, findOne, add, update, remove, sanitizeSalaInput} from './sala.
 
 export const salarouter = Router()
 salarouter.get('/', findAll)
-salarouter.get('/:id', findOne)
+salarouter.get('/:numSala', findOne)
 salarouter.post('/', sanitizeSalaInput, add)
 salarouter.put('/:id', sanitizeSalaInput, update)
 salarouter.patch('/:id', sanitizeSalaInput, update)

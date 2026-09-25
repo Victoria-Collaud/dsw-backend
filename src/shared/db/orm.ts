@@ -1,6 +1,6 @@
 import { MikroORM } from '@mikro-orm/core'
 import { MySqlDriver } from '@mikro-orm/mysql'
-import { SqlHighlighter } from '@mikro-orm/sql-highlighter'
+import { SqlHighlighter } from '@mikro-orm/sql-highlighter' /* da colores bonitos a las consultas SQL*/
 
 export const orm = await MikroORM.init({
   entities: ['dist/**/*.entity.js'],
@@ -27,7 +27,7 @@ export const syncSchema = async () => {
   usar este ? export const syncSchema = async () => {
   await orm.schema.dropSchema()
   await orm.schema.createSchema()
-} o esto import { MikroORM } from '@mikro-orm/mysql'
+}
   */
   await generator.update()
 }
