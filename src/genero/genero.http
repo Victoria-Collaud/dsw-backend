@@ -1,0 +1,36 @@
+###Obtener listado de generos de peliculas
+GET http://localhost:3001/api/generos
+
+###Obtener un género
+GET http://localhost:3001/api/generos/2
+
+### Sube género
+POST http://localhost:3001/api/generos
+Content-Type: application/json
+
+{
+"CodGenero": 1,
+"NombreGenero": "Terror"
+}
+
+### Modificar género
+PUT http://localhost:3001/api/generos/1 
+Content-Type: application/json
+
+{
+"CodGenero": 2,
+"NombreGenero": "Comedia" 
+}
+
+
+### Modificar genero
+PATCH http://localhost:3001/api/generos/2
+Content-Type: application/json
+
+{
+"CodGenero": 2,
+"NombreGenero": "Acción"
+}
+
+###Borrar
+DELETE http://localhost:3001/api/generos/2

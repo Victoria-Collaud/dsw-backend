@@ -35,7 +35,15 @@ try {
  
 
 async function findOne(req:Request, res:Response) {
-   res.status(500).send({ message: 'No implementado'}) };
+    try {
+    const NumSala = Number(req.params.NumSala)
+    const sala = await em.findOneOrFail(Sala, { NumSala })
+    res.status(200).json({ message: 'found sala', data: sala })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  } 
+ // res.status(500).send({ message: 'No implementado'})
+};
 
 //Crea sala       
 async function add (req:Request, res:Response) { 
@@ -51,13 +59,31 @@ async function add (req:Request, res:Response) {
 
 //Busca y modifica sala totalmente
 async function update (req:Request, res:Response) { 
- res.status(500).send({ message: 'No implementado'})
+try {
+    const NumSala = Number(req.params.NumSala)
+    const salaToUpdate = await em.findOneOrFail(Sala, { NumSala })
+    em.assign(salaToUpdate, req.body.sanitizedInput)
+    await em.flush()
+    res
+      .status(200)
+      .json({ message: 'sala updated', data: salaToUpdate })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
 
-//Borra
+//Borra ( agregamos a la class import { PrimaryKeyProp } from '@mikro-orm/core' para que lea NmSala como primary key y no como atributo de la clase)
 async function remove(req: Request, res: Response) {
-  res.status(500).send({ message: 'No implementado'})
+   try {
+    const NumSala = Number(req.params.NumSala)
+    const sala = em.getReference(Sala, NumSala)
+    em.remove(sala)
+    await em.flush()
+    res.status(200).json({ message: 'Sala borrada' })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
 

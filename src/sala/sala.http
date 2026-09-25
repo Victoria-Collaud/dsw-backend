@@ -2,14 +2,14 @@
 GET http://localhost:3001/api/salas
 
 ###Obtener una sala
-GET http://localhost:3001/api/salas/1
+GET http://localhost:3001/api/salas/2
 
 ### Sube sala
 POST http://localhost:3001/api/salas
 Content-Type: application/json  
 
 {
-  "NumSala": 2,
+  "NumSala": 7,
   "Capacidad": 100,
   "TipoPantalla": "2D",
   "TipoAsientos": "Reclinables"
@@ -20,7 +20,7 @@ PUT http://localhost:3001/api/salas/2
 Content-Type: application/json
 
 {
-  "NumSala": 2,
+  "NumSala": 7,
   "Capacidad": 120,
   "TipoPantalla": "3D",
   "TipoAsientos": "Reclinables"
@@ -38,4 +38,4 @@ Content-Type: application/json
 }
 
 ###Borrar
-DELETE http://localhost:3001/api/salas/3
+DELETE http://localhost:3001/api/salas/7

@@ -1,11 +1,12 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/decorators/es'
+import { PrimaryKeyProp } from '@mikro-orm/core'
 
 @Entity()
 export class Sala {
-  @PrimaryKey({ type: Number })
-  id!: number
 
-  @Property({ type: Number })
+  [PrimaryKeyProp]?: 'NumSala';
+
+  @PrimaryKey({ type: Number })
   NumSala!: number
 
   @Property({ type: Number })
