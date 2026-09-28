@@ -4,6 +4,7 @@ import { generorouter } from './genero/genero.routes.js'
 import 'reflect-metadata'
 import { orm, syncSchema } from './shared/db/orm.js'
 import { RequestContext } from '@mikro-orm/core'
+import { usuarioRouter } from './usuario/usuario.routes.js';
 
 const app = express();
 app.use(express.json())
@@ -15,7 +16,7 @@ app.use((req, res, next) => {
 //antes de las rutas y middlewares de negocio
 app.use('/api/salas', salarouter)
 app.use('/api/generos', generorouter)
-
+app.use('/api/usuarios', usuarioRouter)
 
 //avisa que la ruta no existe
 app.use ((_, res) => { 

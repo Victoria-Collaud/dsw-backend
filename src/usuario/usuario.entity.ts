@@ -1,5 +1,10 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/decorators/es'
-import { DateType, PrimaryKeyProp } from '@mikro-orm/core'
+import { Entity, PrimaryKey, Property, Enum } from '@mikro-orm/decorators/es'
+import { PrimaryKeyProp } from '@mikro-orm/core'
+
+export enum RolUsuario {
+  ADMIN = 'ADMIN',
+  CLIENTE = 'CLIENTE',
+}
 
 @Entity()
 export class Usuario {
@@ -9,24 +14,29 @@ export class Usuario {
   @PrimaryKey({ type: Number })
   IdUsuario!: number
 
-  @Property({ type: DateType })
-  FechaNacimiento!: DateType
+  @Property({ type: Date })
+  FechaNacimiento!: Date
 
   @Property({ type: String })
-  GmailUsuario!: string
+  EmailUsuario!: string
+
+  @Property({ type: 'string' })
+  ContrasenaHash!: string
     
-  @Property({ type: String })
-  RolUsuario!: string
+  @Enum(() => RolUsuario)
+  rol: RolUsuario = RolUsuario.CLIENTE;
 
   constructor(
     IdUsuario: number,
-    FechaNacimiento: DateType,
-    GmailUsuario: string,
-    RolUsuario: string,
+    FechaNacimiento: Date,
+    EmailUsuario: string,
+    ContrasenaHash: string,
+    rol: RolUsuario,
   ) {
     this.IdUsuario = IdUsuario
     this.FechaNacimiento = FechaNacimiento
-    this.GmailUsuario = GmailUsuario
-    this.RolUsuario = RolUsuario
+    this.EmailUsuario = EmailUsuario
+    this.ContrasenaHash = ContrasenaHash
+    this.rol = rol
   }
 }

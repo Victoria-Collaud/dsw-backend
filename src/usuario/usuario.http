@@ -1,0 +1,25 @@
+// eeeeeeeeeee
+
+### 
+POST http://localhost:3001/api/usuarios/registro
+Content-Type: application/json
+
+{
+  "EmailUsuario": "juan@test.com",
+  "ContrasenaHash": "123456",
+  "FechaNacimiento": "1995-05-15"
+}
+
+###
+
+POST http://localhost:3001/api/usuarios/login
+Content-Type: application/json
+
+{
+  "email": "juan@test.com",
+  "contrasena": "123456"
+}
+
+###
+
+GET http://localhost:3001/api/usuarios/1
