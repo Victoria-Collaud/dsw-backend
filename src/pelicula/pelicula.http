@@ -1,0 +1,27 @@
+### todas las pelis
+GET http://localhost:3001/api/peliculas
+
+### AgregarPelicula
+POST http://localhost:3001/api/peliculas
+Content-Type: application/json  
+
+{
+    "TituloPelicula": "Shrek",
+    "Duracion": 148,
+    "Sinopsis": "Un ogro que vive en un pantano y tiene que salvar a una princesa de un dragón.",
+    "CodGenero": 1,
+    "Clasificacion": "10/10"
+}
+
+### BorrarPelicula
+DELETE http://localhost:3001/api/peliculas/1
+
+
+
+###  BuscarPorTitulo
+GET http://localhost:3001/api/peliculas/shrek
+
+
+
+### BuscarPorGenero
+GET http://localhost:3001/api/peliculas/1

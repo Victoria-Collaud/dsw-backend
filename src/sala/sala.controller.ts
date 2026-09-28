@@ -42,7 +42,6 @@ async function findOne(req:Request, res:Response) {
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   } 
- // res.status(500).send({ message: 'No implementado'})
 };
 
 //Crea sala       

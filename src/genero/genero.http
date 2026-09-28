@@ -9,8 +9,8 @@ POST http://localhost:3001/api/generos
 Content-Type: application/json
 
 {
-"CodGenero": 1,
-"NombreGenero": "Terror"
+"CodGenero": 3,
+"NombreGenero": "Thriller"
 }
 
 ### Modificar género

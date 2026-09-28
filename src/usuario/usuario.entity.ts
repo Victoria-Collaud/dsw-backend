@@ -1,4 +1,4 @@
-import { Entity, PrimaryKey, Property, Enum } from '@mikro-orm/decorators/es'
+import { Entity, PrimaryKey, Property, Enum} from '@mikro-orm/decorators/es'
 import { PrimaryKeyProp } from '@mikro-orm/core'
 
 export enum RolUsuario {

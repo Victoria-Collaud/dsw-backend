@@ -5,6 +5,7 @@ import 'reflect-metadata'
 import { orm, syncSchema } from './shared/db/orm.js'
 import { RequestContext } from '@mikro-orm/core'
 import { usuarioRouter } from './usuario/usuario.routes.js';
+import { peliculaRouter } from './pelicula/pelicula.routes.js';
 
 const app = express();
 app.use(express.json())
@@ -17,6 +18,7 @@ app.use((req, res, next) => {
 app.use('/api/salas', salarouter)
 app.use('/api/generos', generorouter)
 app.use('/api/usuarios', usuarioRouter)
+app.use('/api/peliculas', peliculaRouter)
 
 //avisa que la ruta no existe
 app.use ((_, res) => { 
