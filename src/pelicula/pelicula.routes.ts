@@ -10,7 +10,7 @@ import { sanitizePeliculaInput, findAll, BuscarPorTitulo, BuscarPorGenero, Agreg
 
 export const peliculaRouter = Router()
 peliculaRouter.get('/', findAll)
-peliculaRouter.get('/:TituloPelicula', BuscarPorTitulo)
-peliculaRouter.get('/:CodGenero', BuscarPorGenero)
+peliculaRouter.get('/buscar', BuscarPorTitulo)
+peliculaRouter.get('/genero/:CodGenero', BuscarPorGenero)
 peliculaRouter.post('/', sanitizePeliculaInput, AgregarPelicula)
 peliculaRouter.delete('/:IdPelicula', BorrarPelicula)

@@ -12,6 +12,17 @@ Content-Type: application/json
     "CodGenero": 1,
     "Clasificacion": "10/10"
 }
+### AgregarPelicula
+POST http://localhost:3001/api/peliculas
+Content-Type: application/json  
+
+{
+    "TituloPelicula": "Las aventuras de Shrek",
+    "Duracion": 198,
+    "Sinopsis": "Un ogro que vive en un pantano y tiene aventuras.",
+    "CodGenero": 2,
+    "Clasificacion": "PG-13"
+}
 
 ### BorrarPelicula
 DELETE http://localhost:3001/api/peliculas/1
@@ -19,9 +30,9 @@ DELETE http://localhost:3001/api/peliculas/1
 
 
 ###  BuscarPorTitulo
-GET http://localhost:3001/api/peliculas/shrek
+GET http://localhost:3001/api/peliculas/buscar?titulo=shr
 
 
 
 ### BuscarPorGenero
-GET http://localhost:3001/api/peliculas/1
+GET http://localhost:3001/api/peliculas/genero/2

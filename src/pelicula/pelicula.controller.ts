@@ -43,16 +43,21 @@ try {
 async function BuscarPorTitulo(req: Request, res: Response) {
     try {
     // Obtenemos el texto ingresado en la URL (por ejemplo: /api/peliculas/padrino)
-    const tituloBuscado = req.params.TituloPelicula
+    const tituloBuscado = req.query.titulo
 
     // Buscamos con $ilike para coincidencia parcial e insensible a mayúsculas/minúsculas
-    const pelicula = await em.findOneOrFail(
+    const peliculas = await em.find(
       Pelicula,
-      { TituloPelicula: { $ilike: `%${tituloBuscado}%` } },
+      { TituloPelicula: { $like: `%${tituloBuscado}%` } },
       { populate: ['genero'] } // Carga la relación con Genero
     )
 
-    res.status(200).json({ message: 'Película encontrada', data: pelicula })
+     if (peliculas.length === 0) {
+      return res.status(404).json({ mensaje: 'No se encontraron películas con ese título' })
+    }
+
+    return res.status(200).json({ mensaje: 'Películas encontradas', data: peliculas })
+
   } catch (error: any) {
     res.status(404).json({ message: 'No se encontró ninguna película con ese título', error: error.message })
   }
@@ -61,9 +66,13 @@ async function BuscarPorTitulo(req: Request, res: Response) {
 
 async function BuscarPorGenero(req:Request, res:Response) {
     try {
-    const CodGenero = Number(req.params.Genero)
-    const peliculas = await em.find(Pelicula, { genero: CodGenero })
-    res.status(200).json({ message: 'found peliculas', data: peliculas })
+    const CodGenero = Number(req.params.CodGenero)
+    const peliculas = await em.find(Pelicula, { genero: CodGenero }, { populate: ['genero'] }) // Carga la relación con Genero
+   if (peliculas.length === 0) {
+      return res.status(404).json({ mensaje: 'No hay películas de ese género' })
+    }
+    return res.status(200).json({ mensaje: 'Películas encontradas', data: peliculas })
+
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   } 
