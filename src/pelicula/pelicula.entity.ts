@@ -3,14 +3,6 @@ import { PrimaryKeyProp } from '@mikro-orm/core'
 import { Genero } from '../genero/genero.entity.js';
 //import { ManyToOne } from '@mikro-orm/decorators/legacy';
 
-/*
-IdPelicula
-TituloPelicula
-sinopsis
-Duración
-Clasificación
-Codgenero */ 
-
 @Entity()
 export class Pelicula {
 
@@ -34,6 +26,9 @@ export class Pelicula {
     @ManyToOne(() => Genero)
     genero!: Genero
 
+    /* @OneToMany(() => Funcion, f => f.pelicula)
+    funciones = new Collection<Funcion>(this)
+*/
     constructor(
         IdPelicula: number,
         TituloPelicula: string,

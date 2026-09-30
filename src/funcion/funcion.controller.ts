@@ -7,7 +7,7 @@ import { Sala } from "../sala/sala.entity.js";
 
 const em = orm.em // entity manager
 
- function sanitizeFuncionInput(req: Request, res: Response, next: NextFunction) { //era nextfunction
+ function sanitizeFuncionInput(req: Request, res: Response, next: NextFunction) { 
     req.body.sanitizedInput = {
         IdFuncion: req.body.IdFuncion,
         Idioma: req.body.Idioma,
@@ -34,7 +34,7 @@ try {
       { pelicula: { IdPelicula } },
       {
         populate: ['pelicula', 'sala'],  // Cargar relaciones
-        orderBy: { Fecha: 'ASC', Horario: 'ASC' }  // Ordenar por fecha y hora
+        orderBy: { Fecha: 'ASC', Horario: 'ASC' }  // Ordena por fecha y hora
       }
     )
     if (funciones.length === 0) {
@@ -47,27 +47,27 @@ try {
       data: funciones
     })
 } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   } 
 } 
 
 
-async function AgregarFuncion (req:Request, res:Response) { 
+async function AgregarFuncion (req:Request, res:Response) { //esta es solo para admins
     try {
     const { Idioma, Fecha, Horario, IdPelicula, NumSala } = req.body
 
-    // 1. Buscar la película en la BD
+    // Busca la película en la BD
     const pelicula = await em.findOne(Pelicula, { IdPelicula: IdPelicula })
     if (!pelicula) {
       return res.status(404).json({ mensaje: 'La película no existe' })
     }
-    //buscar la sala en la BD
+    //busca la sala en la BD
     const sala = await em.findOne(Sala, { NumSala: NumSala })
     if (!sala) {
       return res.status(404).json({ mensaje: 'La sala no existe' })
     }
 
-    // . Crear la función con el objeto Pelicula y sala
+    // Crear la función con el objeto Pelicula y sala
     const nuevaFuncion = new Funcion(
       0,
       Idioma,
@@ -84,7 +84,7 @@ async function AgregarFuncion (req:Request, res:Response) {
     return res.status(201).json(nuevaFuncion)
 
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   } 
 } 
 
@@ -94,9 +94,9 @@ async function BorrarFuncion(req: Request, res: Response) { //esta es solo para 
     const funcion = em.getReference(Funcion, IdFuncion)
     em.remove(funcion)
     await em.flush()
-    res.status(200).json({ message: 'Función borrada' })
+    res.status(200).json({ mensaje: 'Función borrada' })
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   }
 }
 

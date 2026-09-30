@@ -2,15 +2,6 @@ import { Entity, PrimaryKey, Property, ManyToOne } from '@mikro-orm/decorators/e
 import { PrimaryKeyProp } from '@mikro-orm/core'
 import { Pelicula } from '../pelicula/pelicula.entity.js';
 import { Sala } from '../sala/sala.entity.js';
-import { time } from 'console';
-
-/*
-IdFuncion
-Idioma
-Fecha
-Horario
-TipoPantalla
-CapacidadDisponible */ 
 
 @Entity()
 export class Funcion {

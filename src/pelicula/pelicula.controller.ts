@@ -1,19 +1,13 @@
-/* 
-get all
-get por titulo
-get por genero
-delete
-*/
-
-import  { Request, Response} from "express";
+import  { NextFunction, Request, Response} from "express";
 import { Pelicula } from "./pelicula.entity.js"
 import { orm } from "../shared/db/orm.js"
 import { Genero } from "../genero/genero.entity.js";
+import { Funcion } from "../funcion/funcion.entity.js";
 
 
 const em = orm.em // entity manager
 
- function sanitizePeliculaInput(req: Request, res: Response, next:Function) { //era nextfunction
+ function sanitizePeliculaInput(req: Request, res: Response, next:NextFunction) { 
     req.body.sanitizedInput = {
         IdPelicula: req.body.IdPelicula,
         TituloPelicula: req.body.TituloPelicula,
@@ -34,9 +28,9 @@ next ()
 async function findAll (req:Request, res:Response) {
 try {
     const peliculas = await em.find(Pelicula, {})
-    res.status(200).json({ message: 'Listado de todas las películas', data: peliculas })
+    res.status(200).json({ mensaje: 'Listado de todas las películas', data: peliculas })
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   }
 }
 
@@ -59,7 +53,7 @@ async function BuscarPorTitulo(req: Request, res: Response) {
     return res.status(200).json({ mensaje: 'Películas encontradas', data: peliculas })
 
   } catch (error: any) {
-    res.status(404).json({ message: 'No se encontró ninguna película con ese título', error: error.message })
+    res.status(404).json({ mensaje: 'No se encontró ninguna película con ese título', error: error.message })
   }
 }
 
@@ -74,12 +68,12 @@ async function BuscarPorGenero(req:Request, res:Response) {
     return res.status(200).json({ mensaje: 'Películas encontradas', data: peliculas })
 
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   } 
 };
 
 
-async function AgregarPelicula (req:Request, res:Response) { 
+async function AgregarPelicula (req:Request, res:Response) {  //esta es solo para admins
     try {
     const { TituloPelicula, Sinopsis, Duracion, Clasificacion, CodGenero } = req.body
 
@@ -96,7 +90,7 @@ async function AgregarPelicula (req:Request, res:Response) {
       Sinopsis,
       Duracion,
       Clasificacion,
-      genero  // <-- Pasamos el objeto, no el número
+      genero  // Pasamos el objeto no el número
     )
 
     em.persist(nuevaPelicula)
@@ -105,19 +99,28 @@ async function AgregarPelicula (req:Request, res:Response) {
     return res.status(201).json(nuevaPelicula)
 
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   } 
 } 
 
 async function BorrarPelicula(req: Request, res: Response) { //esta es solo para admins
    try {
     const IdPelicula = Number(req.params.IdPelicula)
-    const pelicula = em.getReference(Pelicula, IdPelicula)
+    const pelicula = await em.findOne(Pelicula, { IdPelicula })
+    if (!pelicula) {
+      return res.status(404).json({ mensaje: 'Película no encontrada' })
+    }
+    const funcionesAsociadas = await em.count(Funcion, { pelicula: { IdPelicula: IdPelicula } })
+    if (funcionesAsociadas > 0) {
+    return res.status(400).json({ 
+      mensaje: 'No se puede borrar la película porque tiene funciones asociadas' 
+    })
+  }
     em.remove(pelicula)
     await em.flush()
-    res.status(200).json({ message: 'Pelicula borrada' })
+    res.status(200).json({ mensaje: 'Pelicula borrada' })
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   }
 }
 

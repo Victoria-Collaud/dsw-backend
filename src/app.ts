@@ -7,6 +7,7 @@ import { generorouter } from './genero/genero.routes.js'
 import { usuarioRouter } from './usuario/usuario.routes.js';
 import { peliculaRouter } from './pelicula/pelicula.routes.js';
 import { funcionRouter } from './funcion/funcion.routes.js';
+import { compraRouter } from './compra/compra.routes.js';
 
 const app = express();
 app.use(express.json())
@@ -21,6 +22,7 @@ app.use('/api/generos', generorouter)
 app.use('/api/usuarios', usuarioRouter)
 app.use('/api/peliculas', peliculaRouter)
 app.use('/api/funciones', funcionRouter)
+app.use('/api/compras', compraRouter)
 
 //avisa que la ruta no existe
 app.use ((_, res) => { 

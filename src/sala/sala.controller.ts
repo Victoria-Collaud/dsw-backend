@@ -1,13 +1,12 @@
-import  { Request, Response} from "express";
-//import { SalaRepository } from "./sala.repository.js";
+import  { NextFunction, Request, Response} from "express";
 import { Sala } from "./sala.entity.js";
 import { orm } from "../shared/db/orm.js";
 
 const em = orm.em // entity manager
 
-//const repository = new SalaRepository()
+// son todas para admins (no hay que ponerle el middleware de auth porque ya lo tiene la ruta??)
 
- function sanitizeSalaInput(req: Request, res: Response, next:Function) { //era nextfunction
+ function sanitizeSalaInput(req: Request, res: Response, next:NextFunction) { 
     req.body.sanitizedInput = {
         NumSala: req.body.NumSala,
         Capacidad: req.body.Capacidad,
@@ -23,13 +22,12 @@ const em = orm.em // entity manager
 next ()
 }
 
-
 async function findAll (req:Request, res:Response) {
 try {
     const salas = await em.find(Sala, {})
-    res.status(200).json({ message: 'Listado de todas las salas', data: salas })
+    res.status(200).json({ mensaje: 'Listado de todas las salas', data: salas })
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   }
 }
  
@@ -38,9 +36,9 @@ async function findOne(req:Request, res:Response) {
     try {
     const NumSala = Number(req.params.NumSala)
     const sala = await em.findOneOrFail(Sala, { NumSala })
-    res.status(200).json({ message: 'found sala', data: sala })
+    res.status(200).json({ mensaje: ' sala encontrada', data: sala })
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   } 
 };
 
@@ -49,9 +47,9 @@ async function add (req:Request, res:Response) {
       try {
     const sala = em.create(Sala, req.body)
     await em.flush()
-    res.status(201).json({ message: 'sala creada', data: sala })
+    res.status(201).json({ mensaje: 'sala creada', data: sala })
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   }
 } 
 
@@ -65,9 +63,9 @@ try {
     await em.flush()
     res
       .status(200)
-      .json({ message: 'sala updated', data: salaToUpdate })
+      .json({ mensaje: 'sala updated', data: salaToUpdate })
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   }
 }
 
@@ -79,9 +77,9 @@ async function remove(req: Request, res: Response) {
     const sala = em.getReference(Sala, NumSala)
     em.remove(sala)
     await em.flush()
-    res.status(200).json({ message: 'Sala borrada' })
+    res.status(200).json({ mensaje: 'Sala borrada' })
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   }
 }
 

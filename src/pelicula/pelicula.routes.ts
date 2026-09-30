@@ -1,9 +1,3 @@
-/* 
-get all
-get por titulo
-get por genero
-*/
-
 import{Router} from 'express';
 import { sanitizePeliculaInput, findAll, BuscarPorTitulo, BuscarPorGenero, AgregarPelicula, BorrarPelicula } from './pelicula.controller.js';
 

@@ -1,11 +1,4 @@
-/* 
-registro
-inicio de sesion   En el controlador de registro y login, deberás usar una librería como bcrypt o argon2 para hashear y comparar contraseñas. Rutas como "Ver Perfil" o "Editar Perfil" deben estar protegidas. Necesitarás un Middleware (ej. JWT, Sesiones) que verifique que el usuario está logueado antes de dejarle pasar.
-perfil
-administración ???????
-*/
-
-import { Request, Response } from 'express'; 
+import { NextFunction, Request, Response } from 'express'; 
 import { RolUsuario, Usuario } from './usuario.entity.js';
 import { orm } from '../shared/db/orm.js';
 // bcrypt@6 does not include TypeScript declarations in this project.
@@ -14,7 +7,7 @@ import bcrypt from 'bcrypt'; //Migrar a Authprovider en frontend
 
 const em = orm.em
 
-function sanitizeUsuarioInput(req: Request, res: Response, next:Function) { 
+function sanitizeUsuarioInput(req: Request, res: Response, next:NextFunction) { 
     req.body.sanitizedInput = {
         IdUsuario: req.body.IdUsuario,
         FechaNacimiento: req.body.FechaNacimiento,
@@ -38,7 +31,7 @@ async function registrarUsuario(req: Request, res: Response) {
       // 1. Verificar email duplicado
        const existe = await em.findOne(Usuario, { EmailUsuario: EmailUsuario })
     if (existe) {
-      return res.status(400).json({ message: 'El email ya está registrado' })
+      return res.status(400).json({ mensaje: 'El email ya está registrado' })
     }
       // 2. Hashear contraseña
       const hash = await bcrypt.hash(contrasena, 10)
@@ -59,7 +52,7 @@ async function registrarUsuario(req: Request, res: Response) {
     return res.status(201).json(usuarioSeguro)
 
     } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   }
   }
 
@@ -69,15 +62,15 @@ async function registrarUsuario(req: Request, res: Response) {
       const { email, contrasena } = req.body;
       
       const usuario = await em.findOne(Usuario, { EmailUsuario: email });
-      if (!usuario) return res.status(401).json({ message: 'Credenciales inválidas' });
+      if (!usuario) return res.status(401).json({ mensaje: 'Credenciales inválidas' });
 
       const esValida = await bcrypt.compare(contrasena, usuario.ContrasenaHash);
-      if (!esValida) return res.status(401).json({ message: 'Credenciales inválidas' });
+      if (!esValida) return res.status(401).json({ mensaje: 'Credenciales inválidas' });
 
       // ... generar token
       return res.status(200).json({ usuario, token: '...' });
     } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   }
   }
 
@@ -102,7 +95,7 @@ async function registrarUsuario(req: Request, res: Response) {
     return res.status(200).json(usuarioSeguro);
 
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ mensaje: error.message });
   }
 }
 

@@ -1,11 +1,11 @@
-import  { Request, Response} from "express";
+import  { NextFunction, Request, Response} from "express";
 import { Genero } from "./genero.entity.js";
 import { orm } from "../shared/db/orm.js";
 
 const em = orm.em // entity manager
 
 
- function sanitizeGeneroInput(req: Request, res: Response, next:Function) { //era nextfunction
+ function sanitizeGeneroInput(req: Request, res: Response, next:NextFunction) {
     req.body.sanitizedInput = {
         CodGenero: req.body.CodGenero,
         NombreGenero: req.body.NombreGenero
@@ -23,9 +23,9 @@ next ()
 async function findAll (req:Request, res:Response) {
 try {
     const generos = await em.find(Genero, {})
-    res.status(200).json({ message: 'Listado de todos los géneros de películas', data: generos })
+    res.status(200).json({ mensaje: 'Listado de todos los géneros de películas', data: generos })
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   }
 }
  
@@ -34,9 +34,9 @@ async function findOne(req:Request, res:Response) {
     try {
     const CodGenero = Number(req.params.CodGenero)
     const genero = await em.findOneOrFail(Genero, { CodGenero })
-    res.status(200).json({ message: 'found genero', data: genero })
+    res.status(200).json({ mensaje: 'Género de película encontrado', data: genero })
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   } 
 
 };
@@ -46,9 +46,9 @@ async function add (req:Request, res:Response) {
       try {
     const genero = em.create(Genero, req.body)
     await em.flush()
-    res.status(201).json({ message: 'Género de película agregado', data: genero })
+    res.status(201).json({ mensaje: 'Género de película agregado', data: genero })
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   }
 } 
 
@@ -62,9 +62,9 @@ try {
     await em.flush()
     res
       .status(200)
-      .json({ message: 'Género de película actualizado', data: generoToUpdate })
+      .json({ mensaje: 'Género de película actualizado', data: generoToUpdate })
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   }
 }
 
@@ -76,9 +76,9 @@ async function remove(req: Request, res: Response) {
     const genero = em.getReference(Genero, CodGenero)
     em.remove(genero)
     await em.flush()
-    res.status(200).json({ message: 'Género de película borrado' })
+    res.status(200).json({ mensaje: 'Género de película borrado' })
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ mensaje: error.message })
   }
 }
 
