@@ -51,7 +51,7 @@ try {
   } 
 } 
 
-
+//falta comprobación de que el horario en esa sala esté disponible
 async function AgregarFuncion (req:Request, res:Response) { //esta es solo para admins
     try {
     const { Idioma, Fecha, Horario, IdPelicula, NumSala } = req.body

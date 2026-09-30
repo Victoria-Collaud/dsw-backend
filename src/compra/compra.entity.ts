@@ -13,7 +13,7 @@ Funcion
 import { Entity, PrimaryKey, Property, ManyToOne, Enum } from '@mikro-orm/decorators/es'
 import { Usuario } from '../usuario/usuario.entity.js';
 import { Funcion } from '../funcion/funcion.entity.js';
-
+import { Sala } from '../sala/sala.entity.js';
 export enum MetodoPago {
   TARJETA_CREDITO = 'TARJETA_CREDITO',
   TARJETA_DEBITO = 'TARJETA_DEBITO',
@@ -39,7 +39,7 @@ export class Compra {
     CantEntradas!: number;
 
     @Property({ type: Number })
-    Precio!: number; //definido donde (?)
+    Precio!: number; //definido donde (?) EN SALA
 
     @Property({ type: String })
     QREntradas!: string; // Almacena los códigos QR como una cadena separada por comas
@@ -49,6 +49,7 @@ export class Compra {
     
     @ManyToOne(() => Funcion)
     funcion!: Funcion;
+
 
     constructor(
         IdCompra: number,

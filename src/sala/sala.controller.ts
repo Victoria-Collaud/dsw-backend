@@ -11,7 +11,8 @@ const em = orm.em // entity manager
         NumSala: req.body.NumSala,
         Capacidad: req.body.Capacidad,
         TipoPantalla: req.body.TipoPantalla,
-        TipoAsientos: req.body.TipoAsientos,        
+        TipoAsientos: req.body.TipoAsientos,  
+        PrecioSala: req.body.PrecioSala      
         }
 
     Object.keys(req.body.sanitizedInput).forEach(key =>{

@@ -18,15 +18,22 @@ export class Sala {
   @Property({ type: String })
   TipoAsientos!: string
 
+  
+  @Property({ type: Number })
+  PrecioSala!: Number
+  
+
   constructor(
     NumSala: number,
     Capacidad: number,
     TipoPantalla: string,
     TipoAsientos: string,
+    PrecioSala: number
   ) {
     this.NumSala = NumSala
     this.Capacidad = Capacidad
     this.TipoPantalla = TipoPantalla
     this.TipoAsientos = TipoAsientos
+    this.PrecioSala = PrecioSala
   }
 }

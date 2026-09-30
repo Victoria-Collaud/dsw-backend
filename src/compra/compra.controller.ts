@@ -1,4 +1,4 @@
-/*
+/* falta generar qrs
 crear compra (descuenta capacidad de asientos)
 listar compras de usuario?
 cancelar compra?
@@ -10,6 +10,7 @@ import { Funcion } from "../funcion/funcion.entity.js"
 import { EntityManager } from "@mikro-orm/core";
 import { Usuario } from "../usuario/usuario.entity.js";
 import { randomUUID } from "crypto"; //temporal
+import { Sala } from "../sala/sala.entity.js"
 
 const em = orm.em // entity manager
 
@@ -53,8 +54,9 @@ async function CrearCompra(em: EntityManager, req: Request, res: Response) {
       return res.status(404).json({ mensaje: 'Usuario no encontrado' })
     }
 
-    //calcula precio (por ahora)
-    const precioUnitario = (funcion as any).Precio ?? 1000
+    //calcula precio (por ahora) PRECIO HEREDADO DE SALA
+    
+    const precioUnitario = Number(funcion.sala.PrecioSala)
     const precioTotal = precioUnitario * CantEntradas
 
     //falso qr
