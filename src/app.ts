@@ -8,9 +8,13 @@ import { usuarioRouter } from './usuario/usuario.routes.js';
 import { peliculaRouter } from './pelicula/pelicula.routes.js';
 import { funcionRouter } from './funcion/funcion.routes.js';
 import { compraRouter } from './compra/compra.routes.js';
+import cors from 'cors';
+
 
 const app = express();
 app.use(express.json())
+
+app.use(cors()) // Permite que el frontend le pueda hacer consultas
 
 //luego de los middlewares base
 app.use((req, res, next) => {
@@ -35,3 +39,7 @@ await syncSchema() //never in production
 app.listen(3001, () => { 
     console.log('Server is running on port 3001')}
 )
+
+
+
+

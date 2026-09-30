@@ -1,15 +1,3 @@
-/*
-IdCompra
-MetododePago
-Fecha
-Asiento(s) elegir ubicaciones !!
-CantEntradas
-Precio
-QRentrada(s)
-IdUsuario
-Funcion
-*/
-
 import { Entity, PrimaryKey, Property, ManyToOne, Enum } from '@mikro-orm/decorators/es'
 import { Usuario } from '../usuario/usuario.entity.js';
 import { Funcion } from '../funcion/funcion.entity.js';
