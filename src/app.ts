@@ -1,11 +1,12 @@
-import express from 'express';        
-import { salarouter } from './sala/sala.routes.js'
-import { generorouter } from './genero/genero.routes.js'
-import 'reflect-metadata'
+import express from 'express';    
+import 'reflect-metadata'    
 import { orm, syncSchema } from './shared/db/orm.js'
 import { RequestContext } from '@mikro-orm/core'
+import { salarouter } from './sala/sala.routes.js'
+import { generorouter } from './genero/genero.routes.js'
 import { usuarioRouter } from './usuario/usuario.routes.js';
 import { peliculaRouter } from './pelicula/pelicula.routes.js';
+import { funcionRouter } from './funcion/funcion.routes.js';
 
 const app = express();
 app.use(express.json())
@@ -19,6 +20,7 @@ app.use('/api/salas', salarouter)
 app.use('/api/generos', generorouter)
 app.use('/api/usuarios', usuarioRouter)
 app.use('/api/peliculas', peliculaRouter)
+app.use('/api/funciones', funcionRouter)
 
 //avisa que la ruta no existe
 app.use ((_, res) => { 

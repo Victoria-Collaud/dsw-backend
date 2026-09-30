@@ -6,7 +6,7 @@ POST http://localhost:3001/api/peliculas
 Content-Type: application/json  
 
 {
-    "TituloPelicula": "Shrek",
+    "TituloPelicula": "Shrek 7",
     "Duracion": 148,
     "Sinopsis": "Un ogro que vive en un pantano y tiene que salvar a una princesa de un dragón.",
     "CodGenero": 1,

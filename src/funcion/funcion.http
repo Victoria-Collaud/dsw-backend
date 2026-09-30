@@ -1,0 +1,18 @@
+
+### Crear Funcion
+POST http://localhost:3001/api/funciones
+Content-Type: application/json  
+
+{
+    "Idioma": "Español",
+    "Fecha": "2024-06-15",
+    "Horario": "19:00",
+    "IdPelicula": 3,
+    "NumSala": 2
+}
+
+### Borrar Funcion
+DELETE http://localhost:3001/api/funciones/1
+
+### FuncionesdeunaPelicula
+GET http://localhost:3001/api/funciones/peliculas/2

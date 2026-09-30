@@ -9,8 +9,8 @@ POST http://localhost:3001/api/salas
 Content-Type: application/json  
 
 {
-  "NumSala": 7,
-  "Capacidad": 100,
+  "NumSala": 2,
+  "Capacidad": 1000,
   "TipoPantalla": "2D",
   "TipoAsientos": "Reclinables"
 }
@@ -20,7 +20,7 @@ PUT http://localhost:3001/api/salas/2
 Content-Type: application/json
 
 {
-  "NumSala": 7,
+  "NumSala": 1,
   "Capacidad": 120,
   "TipoPantalla": "3D",
   "TipoAsientos": "Reclinables"
