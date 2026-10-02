@@ -11,7 +11,7 @@ export enum MetodoPago {
 
 @Entity()
 export class Compra {
-    @PrimaryKey()
+    @PrimaryKey({ type: Number })
     IdCompra!: number;
 
     @Enum(() => MetodoPago)
