@@ -20,7 +20,7 @@ next ()
 }
 
 
-async function findAll (req:Request, res:Response) {
+async function findAllGeneros (req:Request, res:Response) {
 try {
     const generos = await em.find(Genero, {})
     res.status(200).json({ mensaje: 'Listado de todos los géneros de películas', data: generos })
@@ -30,7 +30,7 @@ try {
 }
  
 
-async function findOne(req:Request, res:Response) {
+async function findOneGenero(req:Request, res:Response) {
     try {
     const CodGenero = Number(req.params.CodGenero)
     const genero = await em.findOneOrFail(Genero, { CodGenero })
@@ -42,7 +42,7 @@ async function findOne(req:Request, res:Response) {
 };
 
 //Crea sala       
-async function add (req:Request, res:Response) { 
+async function AgregarGenero (req:Request, res:Response) { 
       try {
     const genero = em.create(Genero, req.body)
     await em.flush()
@@ -54,7 +54,7 @@ async function add (req:Request, res:Response) {
 
 
 //Busca y modifica sala totalmente
-async function update (req:Request, res:Response) { 
+async function ActualizarGenero (req:Request, res:Response) { 
 try {
     const CodGenero = Number(req.params.CodGenero)
     const generoToUpdate = await em.findOneOrFail(Genero, { CodGenero })
@@ -70,7 +70,7 @@ try {
 
 
 //Borra ( agregamos a la class import { PrimaryKeyProp } from '@mikro-orm/core' para que lea NmSala como primary key y no como atributo de la clase)
-async function remove(req: Request, res: Response) {
+async function BorrarGenero(req: Request, res: Response) {
    try {
     const CodGenero = Number(req.params.CodGenero)
     const genero = em.getReference(Genero, CodGenero)
@@ -84,4 +84,4 @@ async function remove(req: Request, res: Response) {
 
 
 
-export { findAll, findOne, add, update, remove, sanitizeGeneroInput } 
+export { findAllGeneros, findOneGenero, AgregarGenero, ActualizarGenero, BorrarGenero, sanitizeGeneroInput } 

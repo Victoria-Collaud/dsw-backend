@@ -67,6 +67,18 @@ async function AgregarFuncion (req:Request, res:Response) { //esta es solo para 
       return res.status(404).json({ mensaje: 'La sala no existe' })
     }
 
+     // Verificar que la sala esté libre en esa fecha y horario
+    const funcionExistente = await em.findOne(Funcion, {
+      sala: { NumSala },
+      Fecha: new Date(Fecha),
+      Horario
+    })
+
+    if (funcionExistente) {
+      return res.status(400).json({
+        mensaje: `La sala ${NumSala} ya está ocupada el ${Fecha} a las ${Horario}`
+      })
+    }
     // Crear la función con el objeto Pelicula y sala
     const nuevaFuncion = new Funcion(
       0,

@@ -2,13 +2,13 @@
 ### Crear Funcion
 POST http://localhost:3001/api/funciones
 Content-Type: application/json  
-
+//Authorization: Bearer acavaeltoken
 {
     "Idioma": "Español",
     "Fecha": "2024-06-15",
     "Horario": "19:00",
     "IdPelicula": 3,
-    "NumSala": 2
+    "NumSala": 4
 }
 
 ### Borrar Funcion

@@ -23,7 +23,7 @@ const em = orm.em // entity manager
 next ()
 }
 
-async function findAll (req:Request, res:Response) {
+async function findAllSalas (req:Request, res:Response) {
 try {
     const salas = await em.find(Sala, {})
     res.status(200).json({ mensaje: 'Listado de todas las salas', data: salas })
@@ -33,7 +33,7 @@ try {
 }
  
 
-async function findOne(req:Request, res:Response) {
+async function findOneSala(req:Request, res:Response) {
     try {
     const NumSala = Number(req.params.NumSala)
     const sala = await em.findOneOrFail(Sala, { NumSala })
@@ -44,7 +44,7 @@ async function findOne(req:Request, res:Response) {
 };
 
 //Crea sala       
-async function add (req:Request, res:Response) { 
+async function AgregarSala (req:Request, res:Response) { 
       try {
     const sala = em.create(Sala, req.body)
     await em.flush()
@@ -56,7 +56,7 @@ async function add (req:Request, res:Response) {
 
 
 //Busca y modifica sala totalmente
-async function update (req:Request, res:Response) { 
+async function ActualizarSala (req:Request, res:Response) { 
 try {
     const NumSala = Number(req.params.NumSala)
     const salaToUpdate = await em.findOneOrFail(Sala, { NumSala })
@@ -72,7 +72,7 @@ try {
 
 
 //Borra ( agregamos a la class import { PrimaryKeyProp } from '@mikro-orm/core' para que lea NmSala como primary key y no como atributo de la clase)
-async function remove(req: Request, res: Response) {
+async function BorrarSala(req: Request, res: Response) {
    try {
     const NumSala = Number(req.params.NumSala)
     const sala = em.getReference(Sala, NumSala)
@@ -86,4 +86,4 @@ async function remove(req: Request, res: Response) {
 
 
 
-export { findAll, findOne, add, update, remove, sanitizeSalaInput } 
+export { findAllSalas, findOneSala, AgregarSala, ActualizarSala, BorrarSala, sanitizeSalaInput } 

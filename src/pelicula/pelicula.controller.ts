@@ -25,7 +25,7 @@ const em = orm.em // entity manager
 next ()
 }
 
-async function findAll (req:Request, res:Response) {
+async function findAllPeliculas (req:Request, res:Response) {
 try {
     const peliculas = await em.find(Pelicula, {})
     res.status(200).json({ mensaje: 'Listado de todas las películas', data: peliculas })
@@ -124,4 +124,4 @@ async function BorrarPelicula(req: Request, res: Response) { //esta es solo para
   }
 }
 
-export { sanitizePeliculaInput, findAll, BuscarPorTitulo, BuscarPorGenero, AgregarPelicula, BorrarPelicula }
+export { sanitizePeliculaInput, findAllPeliculas, BuscarPorTitulo, BuscarPorGenero, AgregarPelicula, BorrarPelicula }

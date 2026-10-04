@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { registrarUsuario, iniciarSesion, obtenerMiPerfil } from './usuario.controller.js';
-
+//nada necesita admin
 
 export const usuarioRouter = Router()
 

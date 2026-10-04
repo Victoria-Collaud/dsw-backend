@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from 'express'; 
 import { RolUsuario, Usuario } from './usuario.entity.js';
 import { orm } from '../shared/db/orm.js';
-// bcrypt@6 does not include TypeScript declarations in this project.
-// @ts-expect-error The package is used at runtime and exposes hash/compare.
 import bcrypt from 'bcrypt'; //Migrar a Authprovider en frontend
+import jwt from 'jsonwebtoken';
 
 const em = orm.em
 
@@ -62,14 +61,23 @@ async function registrarUsuario(req: Request, res: Response) {
       const { email, contrasena } = req.body;
       
       const usuario = await em.findOne(Usuario, { EmailUsuario: email });
-      if (!usuario) return res.status(401).json({ mensaje: 'Credenciales inválidas' });
+      if (!usuario) return res.status(401).json({ mensaje: 'usuario inválido' });
 
       const esValida = await bcrypt.compare(contrasena, usuario.ContrasenaHash);
-      if (!esValida) return res.status(401).json({ mensaje: 'Credenciales inválidas' });
+      if (!esValida) return res.status(401).json({ mensaje: 'contraseña incorrecta' });
 
-      // ... generar token
-      return res.status(200).json({ usuario, token: '...' });
-    } catch (error: any) {
+      const token = jwt.sign(
+      { id: usuario.IdUsuario, rol: usuario.rol },  // Payload
+      process.env.JWT_SECRET!,                      // Secreto
+      { expiresIn: '1h' }                           // Expiración
+    )
+     const { ContrasenaHash, ...usuarioSeguro } = usuario
+
+    return res.status(200).json({
+      token,
+      usuario: usuarioSeguro
+    })
+  } catch (error: any) {
     res.status(500).json({ mensaje: error.message })
   }
   }

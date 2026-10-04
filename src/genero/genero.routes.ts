@@ -1,11 +1,11 @@
 import{Router} from 'express';
-import { findAll, findOne, add, update, remove, sanitizeGeneroInput} from './genero.controller.js';
-
+import { sanitizeGeneroInput, findAllGeneros, findOneGenero, AgregarGenero, ActualizarGenero, BorrarGenero, } from './genero.controller.js';
+import { autenticar, autorizar } from '../middlewares/auth.middleware.js';
 
 export const generorouter = Router()
-generorouter.get('/', findAll)
-generorouter.get('/:CodGenero', findOne)
-generorouter.post('/', sanitizeGeneroInput, add)
-generorouter.put('/:CodGenero', sanitizeGeneroInput, update)
-generorouter.patch('/:CodGenero', sanitizeGeneroInput, update)
-generorouter.delete('/:CodGenero', remove)
+generorouter.get('/', findAllGeneros)
+generorouter.get('/:CodGenero', findOneGenero)
+generorouter.post('/', sanitizeGeneroInput, autenticar, autorizar('ADMIN'), AgregarGenero)
+generorouter.put('/:CodGenero', sanitizeGeneroInput, autenticar, autorizar('ADMIN'), ActualizarGenero)
+generorouter.patch('/:CodGenero', sanitizeGeneroInput, autenticar, autorizar('ADMIN'), ActualizarGenero)
+generorouter.delete('/:CodGenero', autenticar, autorizar('ADMIN'), BorrarGenero)
