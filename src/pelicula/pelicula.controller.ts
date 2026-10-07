@@ -78,7 +78,7 @@ async function BuscarPorGenero(req:Request, res:Response) {
 
 async function AgregarPelicula (req:Request, res:Response) {  //esta es solo para admins
     try {
-    const { TituloPelicula, Sinopsis, Duracion, Clasificacion, CodGenero, Cartelera, Trailer } = req.body
+    const { IdPelicula, TituloPelicula, Sinopsis, Duracion, Clasificacion, CodGenero, Cartelera, Trailer } = req.body
 
     // 1. Buscar el género en la BD
     const genero = await em.findOne(Genero, { CodGenero: CodGenero })
@@ -88,7 +88,7 @@ async function AgregarPelicula (req:Request, res:Response) {  //esta es solo par
 
     // 2. Crear la película con el objeto Genero
     const nuevaPelicula = new Pelicula(
-      0,
+      IdPelicula,
       TituloPelicula,
       Sinopsis,
       Duracion,

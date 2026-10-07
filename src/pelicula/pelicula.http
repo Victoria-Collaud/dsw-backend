@@ -7,7 +7,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sIjoiQURNSU4iLCJpYXQiOjE3OTEzNzgxMzgsImV4cCI6MTc5MTM4MTczOH0.3eQP05Zw4LR2XcVYMXCTH8RfbHVs0q2Bxm4cGBxU334
 
 {
-    "TituloPelicula": "Shrek 20",
+    "TituloPelicula": "Shrek 0",
     "Duracion": 400,
     "Sinopsis": "Un ogro que vive en un pantano y tiene que salvar a una princesa de un dragón.",
     "CodGenero": 2,
