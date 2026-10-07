@@ -20,7 +20,7 @@ export class Usuario {
   @Property({ type: String })
   EmailUsuario!: string
 
-  @Property({ type: 'string' })
+  @Property({ type: 'string', hidden: true })
   ContrasenaHash!: string
     
   @Enum(() => RolUsuario)

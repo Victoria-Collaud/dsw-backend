@@ -33,7 +33,7 @@ async function seedAdmin() {
   em.persist(admin)
   await em.flush()
 
-  console.log(`✅ Admin creado: ${email} / admin123`)
+  console.log(`Admin creado: ${email} / admin123`)
 
   await orm.close()
 }

@@ -26,9 +26,12 @@ export class Pelicula {
     @ManyToOne(() => Genero)
     genero!: Genero
 
-    /* @OneToMany(() => Funcion, f => f.pelicula)
-    funciones = new Collection<Funcion>(this)
-*/
+    @Property({ type: String })
+    Cartelera!: string
+
+    @Property({ type: String })
+    Trailer!: string
+
     constructor(
         IdPelicula: number,
         TituloPelicula: string,
@@ -36,6 +39,8 @@ export class Pelicula {
         Duracion: number,
         Clasificacion: string,
         genero: Genero,
+        Cartelera: string,
+        Trailer: string
     ) {
         this.IdPelicula = IdPelicula
         this.TituloPelicula = TituloPelicula
@@ -43,5 +48,7 @@ export class Pelicula {
         this.Duracion = Duracion
         this.Clasificacion = Clasificacion
         this.genero = genero
+        this.Cartelera = Cartelera
+        this.Trailer = Trailer
     }
 }

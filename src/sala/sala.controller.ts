@@ -64,7 +64,7 @@ try {
     await em.flush()
     res
       .status(200)
-      .json({ mensaje: 'sala updated', data: salaToUpdate })
+      .json({ mensaje: 'sala actualizada', data: salaToUpdate })
   } catch (error: any) {
     res.status(500).json({ mensaje: error.message })
   }

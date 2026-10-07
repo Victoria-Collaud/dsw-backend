@@ -112,4 +112,19 @@ async function BorrarFuncion(req: Request, res: Response) { //esta es solo para 
   }
 }
 
-export { sanitizeFuncionInput, FuncionesdeunaPelicula, AgregarFuncion, BorrarFuncion }
+
+async function ActualizarFuncion (req:Request, res:Response) { 
+try {
+    const IdFuncion = Number(req.params.IdFuncion)
+    const funcionToUpdate = await em.findOneOrFail(Funcion, { IdFuncion })
+    em.assign(funcionToUpdate, req.body.sanitizedInput)
+    await em.flush()
+    res
+      .status(200)
+      .json({ mensaje: 'función actualizada', data: funcionToUpdate })
+  } catch (error: any) {
+    res.status(500).json({ mensaje: error.message })
+  }
+}
+
+export { sanitizeFuncionInput, FuncionesdeunaPelicula, AgregarFuncion, BorrarFuncion, ActualizarFuncion }

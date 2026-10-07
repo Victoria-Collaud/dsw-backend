@@ -7,22 +7,25 @@ import { Funcion } from "../funcion/funcion.entity.js";
 
 const em = orm.em // entity manager
 
- function sanitizePeliculaInput(req: Request, res: Response, next:NextFunction) { 
+function sanitizePeliculaInput(req: Request, res: Response, next: NextFunction) {
     req.body.sanitizedInput = {
         IdPelicula: req.body.IdPelicula,
         TituloPelicula: req.body.TituloPelicula,
         Sinopsis: req.body.Sinopsis,
         Duracion: req.body.Duracion,
         Clasificacion: req.body.Clasificacion,
-        CodGenero: req.body.CodGenero,        
-        }
+        CodGenero: req.body.CodGenero,
+        Cartelera: req.body.Cartelera,
+        Trailer: req.body.Trailer,
+    }
 
-    Object.keys(req.body.sanitizedInput).forEach(key =>{
-        if(req.body.sanitizedInput[key]===undefined){
+    Object.keys(req.body.sanitizedInput).forEach((key) => {
+        if (req.body.sanitizedInput[key] === undefined) {
             delete req.body.sanitizedInput[key]
-      }
+        }
     })
-next ()
+
+    next()
 }
 
 async function findAllPeliculas (req:Request, res:Response) {
@@ -75,7 +78,7 @@ async function BuscarPorGenero(req:Request, res:Response) {
 
 async function AgregarPelicula (req:Request, res:Response) {  //esta es solo para admins
     try {
-    const { TituloPelicula, Sinopsis, Duracion, Clasificacion, CodGenero } = req.body
+    const { TituloPelicula, Sinopsis, Duracion, Clasificacion, CodGenero, Cartelera, Trailer } = req.body
 
     // 1. Buscar el género en la BD
     const genero = await em.findOne(Genero, { CodGenero: CodGenero })
@@ -90,7 +93,9 @@ async function AgregarPelicula (req:Request, res:Response) {  //esta es solo par
       Sinopsis,
       Duracion,
       Clasificacion,
-      genero  // Pasamos el objeto no el número
+      genero,  // Pasamos el objeto no el número
+      Cartelera,
+      Trailer
     )
 
     em.persist(nuevaPelicula)
@@ -124,4 +129,19 @@ async function BorrarPelicula(req: Request, res: Response) { //esta es solo para
   }
 }
 
-export { sanitizePeliculaInput, findAllPeliculas, BuscarPorTitulo, BuscarPorGenero, AgregarPelicula, BorrarPelicula }
+async function ActualizarPelicula (req:Request, res:Response) { 
+try {
+    const IdPelicula = Number(req.params.IdPelicula)
+    const peliculaToUpdate = await em.findOneOrFail(Pelicula, { IdPelicula })
+    em.assign(peliculaToUpdate, req.body.sanitizedInput)
+    await em.flush()
+    res
+      .status(200)
+      .json({ mensaje: 'pelicula actualizada', data: peliculaToUpdate })
+  } catch (error: any) {
+    res.status(500).json({ mensaje: error.message })
+  }
+}
+
+
+export { sanitizePeliculaInput, findAllPeliculas, BuscarPorTitulo, BuscarPorGenero, AgregarPelicula, BorrarPelicula, ActualizarPelicula }

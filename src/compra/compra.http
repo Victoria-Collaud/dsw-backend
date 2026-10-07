@@ -1,0 +1,11 @@
+### Comprar entrada
+
+POST http://localhost:3001/api/compras/
+Content-Type: application/json
+
+{
+    "IdUsuario": 1,
+    "IdFuncion": 1,
+    "CantEntradas": 2,
+    "MetodoPago": "TARJETA_CREDITO"
+}
