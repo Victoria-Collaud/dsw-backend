@@ -23,7 +23,6 @@ async function seedAdmin() {
 
   // Crear admin
   const admin = new Usuario(
-    0,
     new Date('2000-01-01'),
     email,
     hash,

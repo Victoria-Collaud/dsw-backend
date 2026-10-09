@@ -7,7 +7,6 @@ const em = orm.em // entity manager
 
  function sanitizeGeneroInput(req: Request, res: Response, next:NextFunction) {
     req.body.sanitizedInput = {
-        CodGenero: req.body.CodGenero,
         NombreGenero: req.body.NombreGenero
         }
 
@@ -41,10 +40,12 @@ async function findOneGenero(req:Request, res:Response) {
 
 };
 
-//Crea sala       
+//Crea genero       
 async function AgregarGenero (req:Request, res:Response) { 
       try {
-    const genero = em.create(Genero, req.body)
+    const { NombreGenero } = req.body.sanitizedInput
+    const genero = new Genero(NombreGenero)
+    em.persist(genero)
     await em.flush()
     res.status(201).json({ mensaje: 'Género de película agregado', data: genero })
   } catch (error: any) {
@@ -53,7 +54,7 @@ async function AgregarGenero (req:Request, res:Response) {
 } 
 
 
-//Busca y modifica sala totalmente
+//Busca y modifica genero 
 async function ActualizarGenero (req:Request, res:Response) { 
 try {
     const CodGenero = Number(req.params.CodGenero)
@@ -69,7 +70,7 @@ try {
 }
 
 
-//Borra ( agregamos a la class import { PrimaryKeyProp } from '@mikro-orm/core' para que lea NmSala como primary key y no como atributo de la clase)
+//Borra genero
 async function BorrarGenero(req: Request, res: Response) {
    try {
     const CodGenero = Number(req.params.CodGenero)

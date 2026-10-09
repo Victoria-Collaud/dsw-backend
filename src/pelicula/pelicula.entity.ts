@@ -9,7 +9,7 @@ export class Pelicula {
   [PrimaryKeyProp]?: 'IdPelicula';
 
   @PrimaryKey({ type: Number })
-  IdPelicula!: number
+  IdPelicula?: number 
 
     @Property({ type: String })
     TituloPelicula!: string
@@ -33,7 +33,7 @@ export class Pelicula {
     Trailer!: string
 
     constructor(
-        IdPelicula: number,
+        //IdPelicula: number,
         TituloPelicula: string,
         Sinopsis: string,
         Duracion: number,
@@ -42,7 +42,7 @@ export class Pelicula {
         Cartelera: string,
         Trailer: string
     ) {
-        this.IdPelicula = IdPelicula
+        //this.IdPelicula = IdPelicula
         this.TituloPelicula = TituloPelicula
         this.Sinopsis = Sinopsis
         this.Duracion = Duracion

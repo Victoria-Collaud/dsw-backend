@@ -9,7 +9,7 @@ export class Funcion {
   [PrimaryKeyProp]?: 'IdFuncion';
 
   @PrimaryKey({ type: Number })
-  IdFuncion!: number
+  IdFuncion?: number
 
     @Property({ type: String })
     Idioma!: string
@@ -30,7 +30,7 @@ export class Funcion {
     sala!: Sala
 
     constructor(
-        IdFuncion: number,
+        //IdFuncion: number,
         Idioma: string,
         Fecha: Date,
         Horario: string,
@@ -38,7 +38,7 @@ export class Funcion {
         pelicula: Pelicula,
         sala: Sala
     ) {
-        this.IdFuncion = IdFuncion
+        //this.IdFuncion = IdFuncion
         this.Idioma = Idioma
         this.Fecha = Fecha
         this.Horario = Horario

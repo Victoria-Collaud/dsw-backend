@@ -15,7 +15,6 @@ const em = orm.em // entity manager
 
 function sanitizeCompraInput(req: Request, res: Response, next: NextFunction) { 
     req.body.sanitizedInput = {
-        IdCompra: req.body.IdCompra,
         MetodoPago: req.body.MetodoPago,
         CantEntradas: req.body.CantEntradas,
         Precio: req.body.Precio, //hace falta?
@@ -73,7 +72,7 @@ async function CrearCompra(em: EntityManager, req: Request, res: Response) {
 
        // Crear la compra
     const nuevaCompra = new Compra(
-      0,
+      // El id lo crea la bd
       MetodoPago,
       new Date(),     // Fecha de compra generada por el servidor
       CantEntradas,

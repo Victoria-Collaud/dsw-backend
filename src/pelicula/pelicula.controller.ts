@@ -9,7 +9,6 @@ const em = orm.em // entity manager
 
 function sanitizePeliculaInput(req: Request, res: Response, next: NextFunction) {
     req.body.sanitizedInput = {
-        IdPelicula: req.body.IdPelicula,
         TituloPelicula: req.body.TituloPelicula,
         Sinopsis: req.body.Sinopsis,
         Duracion: req.body.Duracion,
@@ -78,7 +77,7 @@ async function BuscarPorGenero(req:Request, res:Response) {
 
 async function AgregarPelicula (req:Request, res:Response) {  //esta es solo para admins
     try {
-    const { IdPelicula, TituloPelicula, Sinopsis, Duracion, Clasificacion, CodGenero, Cartelera, Trailer } = req.body
+    const { TituloPelicula, Sinopsis, Duracion, Clasificacion, CodGenero, Cartelera, Trailer } = req.body
 
     // 1. Buscar el género en la BD
     const genero = await em.findOne(Genero, { CodGenero: CodGenero })
@@ -88,7 +87,6 @@ async function AgregarPelicula (req:Request, res:Response) {  //esta es solo par
 
     // 2. Crear la película con el objeto Genero
     const nuevaPelicula = new Pelicula(
-      IdPelicula,
       TituloPelicula,
       Sinopsis,
       Duracion,

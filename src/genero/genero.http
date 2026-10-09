@@ -1,5 +1,6 @@
 ###Obtener listado de generos de peliculas
 GET http://localhost:3001/api/generos
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sIjoiQURNSU4iLCJpYXQiOjE3OTE1NTA2MjcsImV4cCI6MTc5MTU1NDIyN30.CUPkytD8tVsmu62-INXcW1s88QBIWIDNpp7jL4PP_dA
 
 ###Obtener un género
 GET http://localhost:3001/api/generos/2
@@ -7,10 +8,11 @@ GET http://localhost:3001/api/generos/2
 ### Sube género
 POST http://localhost:3001/api/generos
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sIjoiQURNSU4iLCJpYXQiOjE3OTE1NTA2MjcsImV4cCI6MTc5MTU1NDIyN30.CUPkytD8tVsmu62-INXcW1s88QBIWIDNpp7jL4PP_dA
 
 {
-"CodGenero": 3,
-"NombreGenero": "Thriller"
+//"CodGenero": 3,
+"NombreGenero": "Romance"
 }
 
 ### Modificar género

@@ -8,7 +8,6 @@ const em = orm.em
 
 function sanitizeUsuarioInput(req: Request, res: Response, next:NextFunction) { 
     req.body.sanitizedInput = {
-        IdUsuario: req.body.IdUsuario,
         FechaNacimiento: req.body.FechaNacimiento,
         EmailUsuario: req.body.EmailUsuario,
         ContrasenaHash: req.body.ContrasenaHash,
@@ -36,7 +35,6 @@ async function registrarUsuario(req: Request, res: Response) {
       const hash = await bcrypt.hash(contrasena, 10)
       // 3. Crear entidad
       const nuevoUsuario = new Usuario(
-        0,
         new Date(FechaNacimiento),
         EmailUsuario,
         hash,

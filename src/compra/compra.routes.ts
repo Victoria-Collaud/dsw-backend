@@ -1,6 +1,6 @@
 import{Router} from 'express';
 import { sanitizeCompraInput, CrearCompra } from './compra.controller.js';
-import { orm } from '../shared/db/orm.js';
+import { orm } from '../shared/db/orm.js';  
 
 
 export const compraRouter = Router()

@@ -12,7 +12,7 @@ export enum MetodoPago {
 @Entity()
 export class Compra {
     @PrimaryKey({ type: Number })
-    IdCompra!: number;
+    IdCompra?: number;
 
     @Enum(() => MetodoPago)
     MetodoPago!: MetodoPago;
@@ -40,7 +40,7 @@ export class Compra {
 
 
     constructor(
-        IdCompra: number,
+        //IdCompra: number,
         MetodoPago: MetodoPago,
         Fecha: Date,
         //Asientos: string,
@@ -50,7 +50,7 @@ export class Compra {
         usuario: Usuario,
         funcion: Funcion
     ) {
-        this.IdCompra = IdCompra;
+        //this.IdCompra = IdCompra;
         this.MetodoPago = MetodoPago;
         this.Fecha = Fecha;
         //this.Asientos = Asientos;

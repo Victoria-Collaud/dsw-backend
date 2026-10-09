@@ -12,7 +12,7 @@ export class Usuario {
   [PrimaryKeyProp]?: 'IdUsuario';
 
   @PrimaryKey({ type: Number })
-  IdUsuario!: number
+  IdUsuario?: number
 
   @Property({ type: Date })
   FechaNacimiento!: Date
@@ -27,13 +27,13 @@ export class Usuario {
   rol: RolUsuario = RolUsuario.CLIENTE;
 
   constructor(
-    IdUsuario: number,
+    //IdUsuario: number,
     FechaNacimiento: Date,
     EmailUsuario: string,
     ContrasenaHash: string,
     rol: RolUsuario,
   ) {
-    this.IdUsuario = IdUsuario
+    //this.IdUsuario = IdUsuario
     this.FechaNacimiento = FechaNacimiento
     this.EmailUsuario = EmailUsuario
     this.ContrasenaHash = ContrasenaHash

@@ -7,18 +7,18 @@ export class Genero {
   [PrimaryKeyProp]?: 'CodGenero';
 
   @PrimaryKey({ type: Number })
-  CodGenero!: number
+  CodGenero?: number
 
   @Property({ type: String })
   NombreGenero!: string
 
 
   constructor(
-    CodGenero: number,
+    //CodGenero: number,
     NombreGenero: string
     
   )  {
-    this.CodGenero = CodGenero
+    //this.CodGenero = CodGenero
     this.NombreGenero = NombreGenero
   }  
 }

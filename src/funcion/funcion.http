@@ -2,7 +2,7 @@
 ### Crear Funcion
 POST http://localhost:3001/api/funciones
 Content-Type: application/json  
-//Authorization: Bearer acavaeltoken
+Authorization: Bearer acavaeltoken
 {
     "Idioma": "Español",
     "Fecha": "2024-06-15",

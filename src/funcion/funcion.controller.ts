@@ -81,7 +81,6 @@ async function AgregarFuncion (req:Request, res:Response) { //esta es solo para 
     }
     // Crear la función con el objeto Pelicula y sala
     const nuevaFuncion = new Funcion(
-      0,
       Idioma,
        new Date(Fecha), 
       Horario,
