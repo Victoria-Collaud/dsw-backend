@@ -103,4 +103,26 @@ async function CrearCompra(em: EntityManager, req: Request, res: Response) {
 }
 
 
-export { sanitizeCompraInput, CrearCompra }
+async function ListarCompras(em: EntityManager, req: Request, res: Response) {
+  try {
+    const compras = await em.find(
+      Compra,
+      {},
+      {
+        populate: ['usuario', 'funcion', 'funcion.pelicula', 'funcion.sala'],
+        orderBy: { Fecha: 'DESC' }
+      }
+    );
+
+    return res.status(200).json({
+      mensaje: 'Compras encontradas',
+      data: compras
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      mensaje: error.message
+    });
+  }
+}
+
+export { sanitizeCompraInput, CrearCompra, ListarCompras }

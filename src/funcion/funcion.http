@@ -2,12 +2,14 @@
 ### Crear Funcion
 POST http://localhost:3001/api/funciones
 Content-Type: application/json  
-Authorization: Bearer acavaeltoken
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sIjoiQURNSU4iLCJpYXQiOjE3OTIyNzUzNDAsImV4cCI6MTc5MjI3ODk0MH0.WukueBOPMBoh5GAiW-VBpWaIa-NDDv9AK5ellWZxdLs
+
+
 {
     "Idioma": "Español",
     "Fecha": "2024-06-15",
     "Horario": "19:00",
-    "IdPelicula": 3,
+    "IdPelicula": 2,
     "NumSala": 4
 }
 

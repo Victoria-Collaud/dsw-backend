@@ -6,7 +6,10 @@ GET http://localhost:3001/api/salas/2
 
 ### Sube sala
 POST http://localhost:3001/api/salas
+
 Content-Type: application/json  
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sIjoiQURNSU4iLCJpYXQiOjE3OTIyNzUzNDAsImV4cCI6MTc5MjI3ODk0MH0.WukueBOPMBoh5GAiW-VBpWaIa-NDDv9AK5ellWZxdLs
+
 
 {
   "NumSala": 2,

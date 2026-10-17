@@ -4,7 +4,7 @@ GET http://localhost:3001/api/peliculas
 ### AgregarPelicula
 POST http://localhost:3001/api/peliculas
 Content-Type: application/json  
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sIjoiQURNSU4iLCJpYXQiOjE3OTE1NTMxMDgsImV4cCI6MTc5MTU1NjcwOH0.XdsWbaKA4JtlZ2nKToxzZnKraB65ochXn5UxJ8VLajM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sIjoiQURNSU4iLCJpYXQiOjE3OTIyNzUzNDAsImV4cCI6MTc5MjI3ODk0MH0.WukueBOPMBoh5GAiW-VBpWaIa-NDDv9AK5ellWZxdLs
 
 {
     "TituloPelicula": "Shrek 0",
@@ -18,14 +18,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sIjoiQ
 ### AgregarPelicula
 POST http://localhost:3001/api/peliculas
 Content-Type: application/json  
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sIjoiQURNSU4iLCJpYXQiOjE3OTEzNzgxMzgsImV4cCI6MTc5MTM4MTczOH0.3eQP05Zw4LR2XcVYMXCTH8RfbHVs0q2Bxm4cGBxU334
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sIjoiQURNSU4iLCJpYXQiOjE3OTIyNzUzNDAsImV4cCI6MTc5MjI3ODk0MH0.WukueBOPMBoh5GAiW-VBpWaIa-NDDv9AK5ellWZxdLs
+
 
 {
     "TituloPelicula": "Las aventuras de Shrek",
     "Duracion": 198,
     "Sinopsis": "Un ogro que vive en un pantano y tiene aventuras.",
-    "CodGenero": 2,
+    "CodGenero": 4,
     "Clasificacion": "PG-13"
+    "Cartelera": "https://example.com/cartelera2.jpg",
+    "Trailer": "https://example.com/trailer.mp4"
 }
 
 ### BorrarPelicula
