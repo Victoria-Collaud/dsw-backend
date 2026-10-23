@@ -126,4 +126,24 @@ try {
   }
 }
 
-export { sanitizeFuncionInput, FuncionesdeunaPelicula, AgregarFuncion, BorrarFuncion, ActualizarFuncion }
+async function ObtenerFuncionPorId(req: Request, res: Response) {
+  try {
+    const { IdFuncion } = req.params;
+    
+    const funcion = await em.findOne(
+      Funcion, 
+      { IdFuncion: Number(IdFuncion) },
+      { populate: ['pelicula', 'sala'] } // IMPORTANTE: trae la sala y la película
+    );
+
+    if (!funcion) {
+      return res.status(404).json({ mensaje: 'Función no encontrada' });
+    }
+
+    return res.status(200).json({ mensaje: 'Función encontrada', data: funcion });
+  } catch (error: any) {
+    return res.status(500).json({ mensaje: error.message });
+  }
+}
+
+export { sanitizeFuncionInput, FuncionesdeunaPelicula, AgregarFuncion, BorrarFuncion, ActualizarFuncion, ObtenerFuncionPorId }
