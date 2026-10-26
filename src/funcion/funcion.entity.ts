@@ -8,7 +8,7 @@ export class Funcion {
 
   [PrimaryKeyProp]?: 'IdFuncion';
 
-  @PrimaryKey({ type: Number })
+  @PrimaryKey({ type: Number, fieldName: 'id_funcion' })
   IdFuncion?: number
 
     @Property({ type: String })

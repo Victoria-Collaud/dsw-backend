@@ -55,6 +55,14 @@ async function CrearCompra(em: EntityManager, req: Request, res: Response) {
     if (funcion.CapacidadDisponible < CantEntradas) {
       throw new Error(`Solo quedan ${funcion.CapacidadDisponible} asientos disponibles`)
     }
+    // Validar el límite de entradas
+    if (!CantEntradas || CantEntradas < 1) {
+      return res.status(400).json({ mensaje: 'Debes seleccionar al menos 1 entrada.' });
+    }
+
+    if (CantEntradas > 5) {
+      return res.status(400).json({ mensaje: 'Solo puedes comprar un máximo de 5 entradas por transacción.' });
+    }
 
     // Busca el usuario
     const usuario = await em.findOne(Usuario, { IdUsuario: IdUsuario })
