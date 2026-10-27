@@ -24,35 +24,32 @@ next ()
 
 async function registrarUsuario(req: Request, res: Response) {
     try {
-      const { EmailUsuario, ContrasenaHash: contrasena, FechaNacimiento } = req.body
-
-      // 1. Verificar email duplicado
+      const { EmailUsuario, Contrasena: contrasena, FechaNacimiento } = req.body
+      // Verificar email duplicado
        const existe = await em.findOne(Usuario, { EmailUsuario: EmailUsuario })
     if (existe) {
       return res.status(400).json({ mensaje: 'El email ya está registrado' })
     }
-      // 2. Hashear contraseña
+      // Hashear contraseña
       const hash = await bcrypt.hash(contrasena, 10)
-      // 3. Crear entidad
+      // Crear entidad
       const nuevoUsuario = new Usuario(
         new Date(FechaNacimiento),
         EmailUsuario,
         hash,
         RolUsuario.CLIENTE
       );
-         // 4. Guardar en BD
+         // Guardar en BD
      em.persist(nuevoUsuario)
      await em.flush()
 
-      // 5. Devolver respuesta
+      // Devolver respuesta
       const { ContrasenaHash, ...usuarioSeguro } = nuevoUsuario
     return res.status(201).json(usuarioSeguro)
-
     } catch (error: any) {
     res.status(500).json({ mensaje: error.message })
   }
-  }
-
+    }
 
     async function iniciarSesion(req: Request, res: Response) {
     try {

@@ -78,14 +78,17 @@ async function BuscarPorGenero(req:Request, res:Response) {
 async function AgregarPelicula (req:Request, res:Response) {  //esta es solo para admins
     try {
     const { TituloPelicula, Sinopsis, Duracion, Clasificacion, CodGenero, Cartelera, Trailer } = req.body
-
-    // 1. Buscar el género en la BD
-    const genero = await em.findOne(Genero, { CodGenero: CodGenero })
+    // Rervisa que la película no exista ya
+    const peliculaExistente = await em.findOne(Pelicula, { TituloPelicula: TituloPelicula });
+    if (peliculaExistente) {
+      return res.status(400).json({ mensaje: 'Ya existe una película con ese título.' });
+    }
+    // Buscar el género en la BD
+    const genero = await em.findOne(Genero, { CodGenero: Number(CodGenero) })
     if (!genero) {
       return res.status(404).json({ mensaje: 'El género no existe' })
     }
-
-    // 2. Crear la película con el objeto Genero
+    // Crear la película con el objeto Genero
     const nuevaPelicula = new Pelicula(
       TituloPelicula,
       Sinopsis,
@@ -95,12 +98,9 @@ async function AgregarPelicula (req:Request, res:Response) {  //esta es solo par
       Cartelera,
       Trailer
     )
-
     em.persist(nuevaPelicula)
     await em.flush()
-
     return res.status(201).json(nuevaPelicula)
-
   } catch (error: any) {
     res.status(500).json({ mensaje: error.message })
   } 

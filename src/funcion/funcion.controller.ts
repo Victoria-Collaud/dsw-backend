@@ -13,7 +13,6 @@ const em = orm.em // entity manager
         Idioma: req.body.Idioma,
         Fecha: req.body.Fecha,
         Horario: req.body.Horario,
-        // CapacidadDisponible: req.body.CapacidadDisponible,
         IdPelicula: req.body.IdPelicula,
         NumSala: req.body.NumSala,
         }
@@ -37,11 +36,6 @@ try {
         orderBy: { Fecha: 'ASC', Horario: 'ASC' }  // Ordena por fecha y hora
       }
     )
-    if (funciones.length === 0) {
-      return res.status(404).json({
-        mensaje: 'No se encontraron funciones para esa película'
-      })
-    }
     return res.status(200).json({
       mensaje: 'Funciones encontradas',
       data: funciones
@@ -66,13 +60,14 @@ async function AgregarFuncion (req:Request, res:Response) { //esta es solo para 
     if (!sala) {
       return res.status(404).json({ mensaje: 'La sala no existe' })
     }
-
+    const fechaString = Fecha.split('T')[0]; // "2026-10-27"
+    const fechaHora = new Date(`${fechaString}T${Horario}:00`); 
      // Verificar que la sala esté libre en esa fecha y horario
     const funcionExistente = await em.findOne(Funcion, {
-      sala: { NumSala },
-      Fecha: new Date(Fecha),
-      Horario
-    })
+    sala: { NumSala },
+    Fecha: fechaHora,
+    Horario
+    });
 
     if (funcionExistente) {
       return res.status(400).json({
@@ -82,7 +77,7 @@ async function AgregarFuncion (req:Request, res:Response) { //esta es solo para 
     // Crear la función con el objeto Pelicula y sala
     const nuevaFuncion = new Funcion(
       Idioma,
-       new Date(Fecha), 
+      fechaHora, 
       Horario,
       sala.Capacidad, // Usamos la capacidad de la sala 
       pelicula,
