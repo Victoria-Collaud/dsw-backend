@@ -127,17 +127,37 @@ async function BorrarPelicula(req: Request, res: Response) { //esta es solo para
   }
 }
 
-async function ActualizarPelicula (req:Request, res:Response) { 
-try {
-    const IdPelicula = Number(req.params.IdPelicula)
-    const peliculaToUpdate = await em.findOneOrFail(Pelicula, { IdPelicula })
-    em.assign(peliculaToUpdate, req.body.sanitizedInput)
-    await em.flush()
-    res
-      .status(200)
-      .json({ mensaje: 'pelicula actualizada', data: peliculaToUpdate })
+async function ActualizarPelicula(req: Request, res: Response) {
+  try {
+    const { IdPelicula } = req.params;
+    const { TituloPelicula, Sinopsis, Duracion, Clasificacion, CodGenero, Cartelera, Trailer } = req.body;
+
+    // Buscamos la película que queremos actualizar
+    const pelicula = await em.findOne(Pelicula, { IdPelicula: Number(IdPelicula) });
+    if (!pelicula) {
+      return res.status(404).json({ mensaje: 'Película no encontrada' });
+    }
+
+    // Buscamos el nuevo género (si es que nos enviaron uno)
+    if (CodGenero) {
+      const genero = await em.findOne(Genero, { CodGenero: Number(CodGenero) });
+      if (!genero) {
+        return res.status(404).json({ mensaje: 'El género no existe' });
+      }
+      pelicula.genero = genero; // Asignamos el OBJETO
+    }
+    // Actualizamos el resto de los campos
+    pelicula.TituloPelicula = TituloPelicula;
+    pelicula.Sinopsis = Sinopsis;
+    pelicula.Duracion = Duracion;
+    pelicula.Clasificacion = Clasificacion;
+    pelicula.Cartelera = Cartelera;
+    pelicula.Trailer = Trailer;
+    // Guardamos los cambios
+    await em.flush();
+    return res.status(200).json(pelicula);
   } catch (error: any) {
-    res.status(500).json({ mensaje: error.message })
+    res.status(500).json({ mensaje: error.message });
   }
 }
 
