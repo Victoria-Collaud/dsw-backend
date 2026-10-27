@@ -11,7 +11,7 @@ export class Pelicula {
   @PrimaryKey({ type: Number })
   IdPelicula?: number 
 
-    @Property({ type: String })
+    @Property({ type: String,fieldName: 'titulo_pelicula' })
     TituloPelicula!: string
     
     @Property({ type: String })

@@ -77,7 +77,7 @@ async function BuscarPorGenero(req:Request, res:Response) {
 
 async function AgregarPelicula (req:Request, res:Response) {  //esta es solo para admins
     try {
-    const { TituloPelicula, Sinopsis, Duracion, Clasificacion, CodGenero, Cartelera, Trailer } = req.body
+    const { TituloPelicula, Sinopsis, Duracion, Clasificacion, CodGenero, Cartelera, Trailer } = req.body.sanitizedInput || req.body;
     // Rervisa que la película no exista ya
     const peliculaExistente = await em.findOne(Pelicula, { TituloPelicula: TituloPelicula });
     if (peliculaExistente) {
