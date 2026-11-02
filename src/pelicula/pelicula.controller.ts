@@ -3,29 +3,9 @@ import { Pelicula } from "./pelicula.entity.js"
 import { orm } from "../shared/db/orm.js"
 import { Genero } from "../genero/genero.entity.js";
 import { Funcion } from "../funcion/funcion.entity.js";
-
+import { sanitizePeliculaInput } from "./pelicula.utils.js";
 
 const em = orm.em // entity manager
-
-function sanitizePeliculaInput(req: Request, res: Response, next: NextFunction) {
-    req.body.sanitizedInput = {
-        TituloPelicula: req.body.TituloPelicula,
-        Sinopsis: req.body.Sinopsis,
-        Duracion: req.body.Duracion,
-        Clasificacion: req.body.Clasificacion,
-        CodGenero: req.body.CodGenero,
-        Cartelera: req.body.Cartelera,
-        Trailer: req.body.Trailer,
-    }
-
-    Object.keys(req.body.sanitizedInput).forEach((key) => {
-        if (req.body.sanitizedInput[key] === undefined) {
-            delete req.body.sanitizedInput[key]
-        }
-    })
-
-    next()
-}
 
 async function findAllPeliculas (req:Request, res:Response) {
 try {

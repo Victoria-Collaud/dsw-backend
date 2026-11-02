@@ -4,8 +4,12 @@ import { orm } from "../shared/db/orm.js"
 import { Pelicula } from "../pelicula/pelicula.entity.js";
 import { Sala } from "../sala/sala.entity.js";
 
+import { validarFechaFuncion } from './funcion.utils.js'; 
+
 
 const em = orm.em // entity manager
+
+
 
  function sanitizeFuncionInput(req: Request, res: Response, next: NextFunction) { 
     req.body.sanitizedInput = {
@@ -60,13 +64,21 @@ async function AgregarFuncion (req:Request, res:Response) { //esta es solo para 
     if (!sala) {
       return res.status(404).json({ mensaje: 'La sala no existe' })
     }
-    const fechaString = Fecha.split('T')[0]; // "2026-10-27"
+    //const fechaString = Fecha.split('T')[0]; // "2026-10-27"
+    //const fechaHora = new Date(`${fechaString}T${Horario}:00`);
+    // Validar la fecha y hora de la función
+    const validacion = validarFechaFuncion(Fecha, Horario);
+    if (!validacion.ok) {
+      return res.status(400).json({ mensaje: validacion.mensaje });
+    }
+     // Convertimos el string a un objeto Date válido antes de buscar colisiones y guardar
+    const fechaString = Fecha.split('T')[0]; // Extrae "2026-11-20" por si viene con hora
     const fechaHora = new Date(`${fechaString}T${Horario}:00`); 
      // Verificar que la sala esté libre en esa fecha y horario
     const funcionExistente = await em.findOne(Funcion, {
     sala: { NumSala },
-    Fecha: fechaHora,
-    Horario
+    Fecha: Fecha,
+    Horario: Horario
     });
 
     if (funcionExistente) {
@@ -77,7 +89,7 @@ async function AgregarFuncion (req:Request, res:Response) { //esta es solo para 
     // Crear la función con el objeto Pelicula y sala
     const nuevaFuncion = new Funcion(
       Idioma,
-      fechaHora, 
+      fechaHora,
       Horario,
       sala.Capacidad, // Usamos la capacidad de la sala 
       pelicula,
@@ -140,5 +152,7 @@ async function ObtenerFuncionPorId(req: Request, res: Response) {
     return res.status(500).json({ mensaje: error.message });
   }
 }
+
+
 
 export { sanitizeFuncionInput, FuncionesdeunaPelicula, AgregarFuncion, BorrarFuncion, ActualizarFuncion, ObtenerFuncionPorId }
