@@ -62,7 +62,7 @@ async function registrarUsuario(req: Request, res: Response) {
       if (!esValida) return res.status(401).json({ mensaje: 'contraseña incorrecta' });
 
       const token = jwt.sign(
-      { id: usuario.IdUsuario, rol: usuario.rol },  // Payload
+      { idUsuario: usuario.IdUsuario, rol: usuario.rol },  // Payload
       process.env.JWT_SECRET!,                      // Secreto
       { expiresIn: '1h' }                           // Expiración
     )

@@ -2,7 +2,7 @@ import  { NextFunction, Request, Response} from "express";
 import jwt from 'jsonwebtoken';
 
 export interface AuthRequest extends Request {
-  user?: { id: number; rol: string };
+  user?: { idUsuario: number; rol: string };
 }
 
 function autenticar(req: AuthRequest, res: Response, next: NextFunction) {
@@ -16,7 +16,7 @@ function autenticar(req: AuthRequest, res: Response, next: NextFunction) {
   const token = authHeader.split(' ')[1]; // Extrae el token puro [citation:1]
   try {
     // 2. Verificar el token con el secreto (guárdalo en una variable de entorno)
-    const payload = jwt.verify(token, process.env.JWT_SECRET!) as { id: number; rol: string };
+    const payload = jwt.verify(token, process.env.JWT_SECRET!) as { idUsuario: number; rol: string };
     
     // 3. Inyectar el usuario en la request para que el siguiente middleware lo use
     req.user = payload;

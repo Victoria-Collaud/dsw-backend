@@ -1,5 +1,5 @@
 import{Router} from 'express';
-import { sanitizeCompraInput, CrearCompra, ListarCompras } from './compra.controller.js';
+import { sanitizeCompraInput, CrearCompra, ListarCompras, ListarComprasPorUsuario } from './compra.controller.js';
 import { orm } from '../shared/db/orm.js';  
 import { autenticar, autorizar } from '../middlewares/auth.middleware.js';
 
@@ -16,3 +16,7 @@ compraRouter.get('/', autenticar, autorizar('ADMIN'), async (req, res) => {
   return ListarCompras(em, req, res);
 });
 
+compraRouter.get('/miscompras', autenticar, async (req, res) => {
+  const em = orm.em.fork();
+  return ListarComprasPorUsuario(em, req, res);
+})

@@ -10,6 +10,7 @@ import { Funcion } from "../funcion/funcion.entity.js"
 import { EntityManager, LockMode } from "@mikro-orm/core";
 import { Usuario } from "../usuario/usuario.entity.js";
 import { randomUUID } from "crypto"; //temporal
+import { AuthRequest } from '../middlewares/auth.middleware.js';
 
 const em = orm.em // entity manager
 
@@ -133,4 +134,32 @@ async function ListarCompras(em: EntityManager, req: Request, res: Response) {
   }
 }
 
-export { sanitizeCompraInput, CrearCompra, ListarCompras }
+async function ListarComprasPorUsuario(em: EntityManager, req: AuthRequest, res: Response) {
+  try {
+     const usuarioId = req.user?.idUsuario;
+
+    if (!usuarioId) {
+      return res.status(401).json({ mensaje: 'No autenticado' });
+    }
+    
+    const compras = await em.find(
+      Compra,
+      { usuario: { IdUsuario: usuarioId } },
+      {
+        populate: ['usuario', 'funcion', 'funcion.pelicula', 'funcion.sala'],
+        orderBy: { Fecha: 'DESC' }
+      }
+    );
+
+    return res.status(200).json({
+      mensaje: 'Compras encontradas',
+      data: compras
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      mensaje: error.message
+    });
+  }
+}
+
+export { sanitizeCompraInput, CrearCompra, ListarCompras, ListarComprasPorUsuario }
