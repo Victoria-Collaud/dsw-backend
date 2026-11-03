@@ -2,6 +2,7 @@ import { Entity, PrimaryKey, Property, ManyToOne, Enum } from '@mikro-orm/decora
 import { Usuario } from '../usuario/usuario.entity.js';
 import { Funcion } from '../funcion/funcion.entity.js';
 import { Sala } from '../sala/sala.entity.js';
+import { text } from 'stream/consumers';
 export enum MetodoPago {
   TARJETA_CREDITO = 'TARJETA_CREDITO',
   TARJETA_DEBITO = 'TARJETA_DEBITO',
@@ -29,7 +30,7 @@ export class Compra {
     @Property({ type: Number })
     Precio!: number; //definido donde (?) EN SALA
 
-    @Property({ type: String })
+    @Property({ type: 'text' })
     QREntradas!: string; // Almacena los códigos QR como una cadena separada por comas
 
     @ManyToOne(() => Usuario)

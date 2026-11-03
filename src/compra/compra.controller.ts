@@ -1,8 +1,3 @@
-/* falta generar qrs
-crear compra (descuenta capacidad de asientos)
-listar compras de usuario?
-cancelar compra?
-*/
 import  { NextFunction, Request, Response} from "express";
 import { orm } from "../shared/db/orm.js"
 import { Compra } from "./compra.entity.js"
@@ -10,6 +5,7 @@ import { Funcion } from "../funcion/funcion.entity.js"
 import { EntityManager, LockMode } from "@mikro-orm/core";
 import { Usuario } from "../usuario/usuario.entity.js";
 import { randomUUID } from "crypto"; //temporal
+import Qrcode from "qrcode";
 import { AuthRequest } from '../middlewares/auth.middleware.js';
 
 const em = orm.em // entity manager
@@ -47,7 +43,6 @@ async function CrearCompra(em: EntityManager, req: Request, res: Response) {
           lockMode: LockMode.PESSIMISTIC_WRITE
         }
       )
-
       if (!funcion) {
         throw new Error('La función no existe')
       }
@@ -60,7 +55,6 @@ async function CrearCompra(em: EntityManager, req: Request, res: Response) {
     if (!CantEntradas || CantEntradas < 1) {
       return res.status(400).json({ mensaje: 'Debes seleccionar al menos 1 entrada.' });
     }
-
     if (CantEntradas > 5) {
       return res.status(400).json({ mensaje: 'Solo puedes comprar un máximo de 5 entradas por transacción.' });
     }
@@ -71,13 +65,27 @@ async function CrearCompra(em: EntityManager, req: Request, res: Response) {
       return res.status(404).json({ mensaje: 'Usuario no encontrado' })
     }
 
-    //calcula precio PRECIO HEREDADO DE SALA
-    
+    //calcula PRECIO HEREDADO DE SALA
     const precioUnitario = Number(funcion.sala.PrecioSala)
     const precioTotal = precioUnitario * CantEntradas
 
-    //falso qr
-    const qrs = Array.from({ length: CantEntradas }, () => randomUUID()).join(',')
+    //genera QR para cada entrada
+    const qrs = await Promise.all(
+  Array.from({ length: CantEntradas }, async () => {
+    const codigoUnico = randomUUID();
+    // Generamos el QR como Data URL (base64)
+    const qrDataUrl = await Qrcode.toDataURL(
+      JSON.stringify({
+        compra: codigoUnico,
+        funcion: IdFuncion,
+        usuario: IdUsuario,
+      }),
+      { width: 300, margin: 2 }
+    );
+    return qrDataUrl;
+  })
+);
+const qrString = qrs.join('|||');
 
        // Crear la compra
     const nuevaCompra = new Compra(
@@ -86,7 +94,7 @@ async function CrearCompra(em: EntityManager, req: Request, res: Response) {
       new Date(),     // Fecha de compra generada por el servidor
       CantEntradas,
       precioTotal,
-      qrs,
+      qrString,
       usuario,
       funcion
     )
