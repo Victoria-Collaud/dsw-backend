@@ -21,8 +21,8 @@ export class Compra {
     @Property({ type: Date })
     Fecha!: Date;
 
-   // @Property({ type: String })
-   // Asientos!: string; // Almacena los asientos elegidos como una cadena separada por comas
+    //@Property({ type: String })
+    //Asientos!: string; // Almacena los asientos elegidos como una cadena separada por comas
 
     @Property({ type: Number })
     CantEntradas!: number;

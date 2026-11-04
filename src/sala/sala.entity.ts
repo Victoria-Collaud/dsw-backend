@@ -17,7 +17,6 @@ export class Sala {
 
   @Property({ type: String })
   TipoAsientos!: string
-
   
   @Property({ type: Number })
   PrecioSala!: Number
