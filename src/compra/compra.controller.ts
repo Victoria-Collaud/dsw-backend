@@ -14,11 +14,11 @@ function sanitizeCompraInput(req: Request, res: Response, next: NextFunction) {
     req.body.sanitizedInput = {
         MetodoPago: req.body.MetodoPago,
         CantEntradas: req.body.CantEntradas,
-        Precio: req.body.Precio, //hace falta?
+        AsientosElegidos: req.body.AsientosElegidos,
+        Precio: req.body.Precio, 
         IdUsuario: req.body.IdUsuario,
         IdFuncion: req.body.IdFuncion
        }
-
     Object.keys(req.body.sanitizedInput).forEach(key =>{
         if(req.body.sanitizedInput[key]===undefined){
             delete req.body.sanitizedInput[key]
@@ -29,12 +29,9 @@ next ()
 
 async function CrearCompra(em: EntityManager, req: Request, res: Response) {
   try {
-        
-    const { IdUsuario, IdFuncion, CantEntradas, MetodoPago } = req.body.sanitizedInput
-    
-    
+    const { IdUsuario, IdFuncion, CantEntradas, MetodoPago, AsientosElegidos } = req.body.sanitizedInput
     const nuevaCompra = await em.transactional(async (em) => {
-      // 1. Buscar la función CON BLOQUEO PESIMISTA
+      //  Buscar la función CON BLOQUEO PESIMISTA
       const funcion = await em.findOne(
         Funcion,
         { IdFuncion },
@@ -46,29 +43,39 @@ async function CrearCompra(em: EntityManager, req: Request, res: Response) {
       if (!funcion) {
         throw new Error('La función no existe')
       }
-
     // Verificar capacidad
     if (funcion.CapacidadDisponible < CantEntradas) {
       throw new Error(`Solo quedan ${funcion.CapacidadDisponible} asientos disponibles`)
     }
     // Validar el límite de entradas
     if (!CantEntradas || CantEntradas < 1) {
-      return res.status(400).json({ mensaje: 'Debes seleccionar al menos 1 entrada.' });
+      throw new Error('Debes seleccionar al menos 1 entrada.');
     }
     if (CantEntradas > 5) {
-      return res.status(400).json({ mensaje: 'Solo puedes comprar un máximo de 5 entradas por transacción.' });
+      throw new Error('Solo puedes comprar un máximo de 5 entradas por transacción.');
     }
+    //verifica que los asientos estén libres
+     if (!AsientosElegidos || AsientosElegidos.length !== CantEntradas) {
+        throw new Error('La cantidad de asientos no coincide con las entradas solicitadas.');
+      }
 
+      const comprasExistentes = await em.find(Compra, { funcion: { IdFuncion } });
+      const asientosOcupados = comprasExistentes.flatMap(c => 
+      c.AsientosElegidos ? c.AsientosElegidos.split(',') : []
+      );
+
+      const asientosYaTomados = AsientosElegidos.filter((a: string) => asientosOcupados.includes(a));
+      if (asientosYaTomados.length > 0) {
+        throw new Error(`Los siguientes asientos ya están ocupados: ${asientosYaTomados.join(', ')}`);
+      }
     // Busca el usuario
     const usuario = await em.findOne(Usuario, { IdUsuario: IdUsuario })
     if (!usuario) {
-      return res.status(404).json({ mensaje: 'Usuario no encontrado' })
+      throw new Error('Usuario no encontrado')
     }
-
     //calcula PRECIO HEREDADO DE SALA
     const precioUnitario = Number(funcion.sala.PrecioSala)
     const precioTotal = precioUnitario * CantEntradas
-
     //genera QR para cada entrada
     const qrs = await Promise.all(
   Array.from({ length: CantEntradas }, async () => {
@@ -86,34 +93,29 @@ async function CrearCompra(em: EntityManager, req: Request, res: Response) {
   })
 );
 const qrString = qrs.join('|||');
-
        // Crear la compra
     const nuevaCompra = new Compra(
       // El id lo crea la bd
       MetodoPago,
       new Date(),     // Fecha de compra generada por el servidor
+      AsientosElegidos, 
       CantEntradas,
       precioTotal,
       qrString,
       usuario,
       funcion
     )
-
     // restar capacidad de la función
     funcion.CapacidadDisponible -= CantEntradas
-   
     // Guardar todo en una transacción
     em.persist(nuevaCompra)
     await em.flush()
-
     return nuevaCompra
   })
-    
   return res.status(201).json({
     mensaje: 'Compra realizada con éxito',
     data: nuevaCompra
     })
-
   } catch (error: any) {
     res.status(500).json({ mensaje: error.message })
   }
@@ -130,7 +132,6 @@ async function ListarCompras(em: EntityManager, req: Request, res: Response) {
         orderBy: { Fecha: 'DESC' }
       }
     );
-
     return res.status(200).json({
       mensaje: 'Compras encontradas',
       data: compras
@@ -145,20 +146,16 @@ async function ListarCompras(em: EntityManager, req: Request, res: Response) {
 async function ListarComprasPorUsuario(em: EntityManager, req: AuthRequest, res: Response) {
   try {
      const usuarioId = req.user?.idUsuario;
-
     if (!usuarioId) {
       return res.status(401).json({ mensaje: 'No autenticado' });
     }
-    
     const compras = await em.find(
       Compra,
       { usuario: { IdUsuario: usuarioId } },
-      {
-        populate: ['usuario', 'funcion', 'funcion.pelicula', 'funcion.sala'],
+      {populate: ['usuario', 'funcion', 'funcion.pelicula', 'funcion.sala'],
         orderBy: { Fecha: 'DESC' }
       }
     );
-
     return res.status(200).json({
       mensaje: 'Compras encontradas',
       data: compras
@@ -170,4 +167,17 @@ async function ListarComprasPorUsuario(em: EntityManager, req: AuthRequest, res:
   }
 }
 
-export { sanitizeCompraInput, CrearCompra, ListarCompras, ListarComprasPorUsuario }
+async function ObtenerAsientosOcupados(req: Request, res: Response) {
+  try {
+    const { IdFuncion } = req.params;
+    const compras = await em.find(Compra, { funcion: { IdFuncion: Number(IdFuncion) } });
+    const ocupados = compras.flatMap(c => 
+      c.AsientosElegidos ? c.AsientosElegidos.split(',') : []
+    );
+    return res.status(200).json({ data: ocupados });
+  } catch (error: any) {
+    return res.status(500).json({ mensaje: error.message });
+  }
+}
+
+export { sanitizeCompraInput, CrearCompra, ListarCompras, ListarComprasPorUsuario, ObtenerAsientosOcupados }

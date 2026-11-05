@@ -3,13 +3,9 @@ import { Funcion } from "./funcion.entity.js"
 import { orm } from "../shared/db/orm.js"
 import { Pelicula } from "../pelicula/pelicula.entity.js";
 import { Sala } from "../sala/sala.entity.js";
-
 import { validarFechaFuncion } from './funcion.utils.js'; 
 
-
 const em = orm.em // entity manager
-
-
 
  function sanitizeFuncionInput(req: Request, res: Response, next: NextFunction) { 
     req.body.sanitizedInput = {
@@ -20,7 +16,6 @@ const em = orm.em // entity manager
         IdPelicula: req.body.IdPelicula,
         NumSala: req.body.NumSala,
         }
-
     Object.keys(req.body.sanitizedInput).forEach(key =>{
         if(req.body.sanitizedInput[key]===undefined){
             delete req.body.sanitizedInput[key]
@@ -50,10 +45,9 @@ try {
 } 
 
 //falta comprobación de que el horario en esa sala esté disponible
-async function AgregarFuncion (req:Request, res:Response) { //esta es solo para admins
+async function AgregarFuncion (req:Request, res:Response) { 
     try {
     const { Idioma, Fecha, Horario, IdPelicula, NumSala } = req.body
-
     // Busca la película en la BD
     const pelicula = await em.findOne(Pelicula, { IdPelicula: IdPelicula })
     if (!pelicula) {
@@ -64,8 +58,6 @@ async function AgregarFuncion (req:Request, res:Response) { //esta es solo para 
     if (!sala) {
       return res.status(404).json({ mensaje: 'La sala no existe' })
     }
-    //const fechaString = Fecha.split('T')[0]; // "2026-10-27"
-    //const fechaHora = new Date(`${fechaString}T${Horario}:00`);
     // Validar la fecha y hora de la función
     const validacion = validarFechaFuncion(Fecha, Horario);
     if (!validacion.ok) {
@@ -77,10 +69,9 @@ async function AgregarFuncion (req:Request, res:Response) { //esta es solo para 
      // Verificar que la sala esté libre en esa fecha y horario
     const funcionExistente = await em.findOne(Funcion, {
     sala: { NumSala },
-    Fecha: Fecha,
+    Fecha: fechaHora, //fechaHora es un objeto Date que combina Fecha y Horario O DEBERIA IR Fecha????
     Horario: Horario
     });
-
     if (funcionExistente) {
       return res.status(400).json({
         mensaje: `La sala ${NumSala} ya está ocupada el ${Fecha} a las ${Horario}`
@@ -95,12 +86,9 @@ async function AgregarFuncion (req:Request, res:Response) { //esta es solo para 
       pelicula,
       sala
     )
-
     em.persist(nuevaFuncion)
     await em.flush()
-
     return res.status(201).json(nuevaFuncion)
-
   } catch (error: any) {
     res.status(500).json({ mensaje: error.message })
   } 
@@ -142,17 +130,14 @@ async function ObtenerFuncionPorId(req: Request, res: Response) {
       { IdFuncion: Number(IdFuncion) },
       { populate: ['pelicula', 'sala'] } // IMPORTANTE: trae la sala y la película
     );
-
     if (!funcion) {
       return res.status(404).json({ mensaje: 'Función no encontrada' });
     }
-
     return res.status(200).json({ mensaje: 'Función encontrada', data: funcion });
   } catch (error: any) {
     return res.status(500).json({ mensaje: error.message });
   }
 }
-
 
 
 export { sanitizeFuncionInput, FuncionesdeunaPelicula, AgregarFuncion, BorrarFuncion, ActualizarFuncion, ObtenerFuncionPorId }

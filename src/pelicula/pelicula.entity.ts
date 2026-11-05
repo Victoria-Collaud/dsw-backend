@@ -1,7 +1,6 @@
 import { Entity, PrimaryKey, Property, ManyToOne } from '@mikro-orm/decorators/es'
 import { PrimaryKeyProp } from '@mikro-orm/core'
 import { Genero } from '../genero/genero.entity.js';
-//import { ManyToOne } from '@mikro-orm/decorators/legacy';
 
 @Entity()
 export class Pelicula {
@@ -33,7 +32,6 @@ export class Pelicula {
     Trailer!: string
 
     constructor(
-        //IdPelicula: number,
         TituloPelicula: string,
         Sinopsis: string,
         Duracion: number,
@@ -42,7 +40,6 @@ export class Pelicula {
         Cartelera: string,
         Trailer: string
     ) {
-        //this.IdPelicula = IdPelicula
         this.TituloPelicula = TituloPelicula
         this.Sinopsis = Sinopsis
         this.Duracion = Duracion

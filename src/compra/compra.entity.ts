@@ -1,8 +1,7 @@
 import { Entity, PrimaryKey, Property, ManyToOne, Enum } from '@mikro-orm/decorators/es'
 import { Usuario } from '../usuario/usuario.entity.js';
 import { Funcion } from '../funcion/funcion.entity.js';
-import { Sala } from '../sala/sala.entity.js';
-import { text } from 'stream/consumers';
+
 export enum MetodoPago {
   TARJETA_CREDITO = 'TARJETA_CREDITO',
   TARJETA_DEBITO = 'TARJETA_DEBITO',
@@ -21,17 +20,17 @@ export class Compra {
     @Property({ type: Date })
     Fecha!: Date;
 
-    //@Property({ type: String })
-    //Asientos!: string; // Almacena los asientos elegidos como una cadena separada por comas
+    @Property({ type: 'text', nullable: true })
+    AsientosElegidos!: string; // Almacena los asientos elegidos como una cadena separada por comas
 
     @Property({ type: Number })
     CantEntradas!: number;
 
     @Property({ type: Number })
-    Precio!: number; //definido donde (?) EN SALA
+    Precio!: number; //definido EN SALA
 
     @Property({ type: 'text' })
-    QREntradas!: string; // Almacena los códigos QR como una cadena separada por comas
+    QREntradas!: string; // Almacena los códigos QR como una cadena separada por "|||"
 
     @ManyToOne(() => Usuario)
     usuario!: Usuario;
@@ -39,22 +38,19 @@ export class Compra {
     @ManyToOne(() => Funcion)
     funcion!: Funcion;
 
-
     constructor(
-        //IdCompra: number,
         MetodoPago: MetodoPago,
         Fecha: Date,
-        //Asientos: string,
+        AsientosElegidos: string[] = [],
         CantEntradas: number,
         Precio: number,
         QREntradas: string,
         usuario: Usuario,
         funcion: Funcion
     ) {
-        //this.IdCompra = IdCompra;
         this.MetodoPago = MetodoPago;
         this.Fecha = Fecha;
-        //this.Asientos = Asientos;
+        this.AsientosElegidos = AsientosElegidos.join(',');
         this.CantEntradas = CantEntradas;
         this.Precio = Precio;
         this.QREntradas = QREntradas;

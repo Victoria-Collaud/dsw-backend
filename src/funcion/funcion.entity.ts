@@ -23,6 +23,8 @@ export class Funcion {
     @Property({ type: Number })
     CapacidadDisponible!: number
 
+    
+
     @ManyToOne(() => Pelicula)
     pelicula!: Pelicula
 

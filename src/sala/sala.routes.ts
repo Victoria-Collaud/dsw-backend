@@ -1,6 +1,7 @@
 import{Router} from 'express';
 import { findAllSalas, findOneSala, AgregarSala, ActualizarSala, BorrarSala, sanitizeSalaInput} from './sala.controller.js';
 import { autenticar, autorizar } from '../middlewares/auth.middleware.js';
+import { ObtenerAsientosDeSala } from './sala.controller.js';
 
 export const salarouter = Router()
 salarouter.get('/', autenticar, autorizar('ADMIN'), findAllSalas) //no NECESITA admin
@@ -9,3 +10,4 @@ salarouter.post('/', sanitizeSalaInput, autenticar, autorizar('ADMIN'), AgregarS
 salarouter.put('/:NumSala', sanitizeSalaInput, autenticar, autorizar('ADMIN'), ActualizarSala)
 salarouter.patch('/:NumSala', sanitizeSalaInput, autenticar, autorizar('ADMIN'), ActualizarSala)
 salarouter.delete('/:NumSala', autenticar, autorizar('ADMIN'), BorrarSala)
+salarouter.get('/:NumSala/asientos', autenticar, autorizar('ADMIN'), ObtenerAsientosDeSala)

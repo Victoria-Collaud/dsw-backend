@@ -1,6 +1,16 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/decorators/es'
 import { PrimaryKeyProp } from '@mikro-orm/core'
 
+
+export enum Capacidad {
+  PRIVADA = 24,  // 4 filas x 6 columnas
+  CHICA = 40,    // 5 filas x 8 columnas
+  MEDIANA = 64,  // 8 filas x 8 columnas
+  GRANDE = 100,  // 10 filas x 10 columnas
+  PLUS = 150,    // 10 filas x 15 columnas
+
+}
+
 @Entity()
 export class Sala {
 
@@ -10,7 +20,7 @@ export class Sala {
   NumSala!: number
 
   @Property({ type: Number })
-  Capacidad!: number
+  Capacidad!: number; 
 
   @Property({ type: String })
   TipoPantalla!: string

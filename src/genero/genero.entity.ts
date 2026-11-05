@@ -14,11 +14,10 @@ export class Genero {
 
 
   constructor(
-    //CodGenero: number,
     NombreGenero: string
-    
-  )  {
-    //this.CodGenero = CodGenero
+  )  
+  
+  {
     this.NombreGenero = NombreGenero
   }  
 }

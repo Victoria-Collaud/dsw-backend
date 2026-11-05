@@ -20,20 +20,16 @@ async function BuscarPorTitulo(req: Request, res: Response) {
     try {
     // Obtenemos el texto ingresado en la URL (por ejemplo: /api/peliculas/padrino)
     const tituloBuscado = req.query.titulo
-
     // Buscamos con $ilike para coincidencia parcial e insensible a mayúsculas/minúsculas
     const peliculas = await em.find(
       Pelicula,
       { TituloPelicula: { $like: `%${tituloBuscado}%` } },
       { populate: ['genero'] } // Carga la relación con Genero
     )
-
      if (peliculas.length === 0) {
       return res.status(404).json({ mensaje: 'No se encontraron películas con ese título' })
     }
-
     return res.status(200).json({ mensaje: 'Películas encontradas', data: peliculas })
-
   } catch (error: any) {
     res.status(404).json({ mensaje: 'No se encontró ninguna película con ese título', error: error.message })
   }
@@ -48,12 +44,10 @@ async function BuscarPorGenero(req:Request, res:Response) {
       return res.status(404).json({ mensaje: 'No hay películas de ese género' })
     }
     return res.status(200).json({ mensaje: 'Películas encontradas', data: peliculas })
-
   } catch (error: any) {
     res.status(500).json({ mensaje: error.message })
   } 
 };
-
 
 async function AgregarPelicula (req:Request, res:Response) {  //esta es solo para admins
     try {
@@ -111,13 +105,11 @@ async function ActualizarPelicula(req: Request, res: Response) {
   try {
     const { IdPelicula } = req.params;
     const { TituloPelicula, Sinopsis, Duracion, Clasificacion, CodGenero, Cartelera, Trailer } = req.body;
-
     // Buscamos la película que queremos actualizar
     const pelicula = await em.findOne(Pelicula, { IdPelicula: Number(IdPelicula) });
     if (!pelicula) {
       return res.status(404).json({ mensaje: 'Película no encontrada' });
     }
-
     // Buscamos el nuevo género (si es que nos enviaron uno)
     if (CodGenero) {
       const genero = await em.findOne(Genero, { CodGenero: Number(CodGenero) });

@@ -1,10 +1,9 @@
 import  { NextFunction, Request, Response} from "express";
 import { Sala } from "./sala.entity.js";
 import { orm } from "../shared/db/orm.js";
+import { generarAsientos } from './sala.utils.js';
 
 const em = orm.em // entity manager
-
-// son todas para admins (no hay que ponerle el middleware de auth porque ya lo tiene la ruta??)
 
  function sanitizeSalaInput(req: Request, res: Response, next:NextFunction) { 
     req.body.sanitizedInput = {
@@ -14,7 +13,6 @@ const em = orm.em // entity manager
         TipoAsientos: req.body.TipoAsientos,  
         PrecioSala: req.body.PrecioSala      
         }
-
     Object.keys(req.body.sanitizedInput).forEach(key =>{
         if(req.body.sanitizedInput[key]===undefined){
             delete req.body.sanitizedInput[key]
@@ -54,7 +52,6 @@ async function AgregarSala (req:Request, res:Response) {
   }
 } 
 
-
 //Busca y modifica sala totalmente
 async function ActualizarSala (req:Request, res:Response) { 
 try {
@@ -84,6 +81,18 @@ async function BorrarSala(req: Request, res: Response) {
   }
 }
 
+async function ObtenerAsientosDeSala(req: Request, res: Response) {
+  try {
+    const { NumSala } = req.params;
+    const sala = await em.findOne(Sala, { NumSala: Number(NumSala) });
+    if (!sala) return res.status(404).json({ mensaje: 'Sala no encontrada' });
+
+    const asientos = generarAsientos(sala.Capacidad);
+    return res.status(200).json({ mensaje: 'Asientos generados', data: asientos });
+  } catch (error: any) {
+    return res.status(500).json({ mensaje: error.message });
+  }
+}
 
 
-export { findAllSalas, findOneSala, AgregarSala, ActualizarSala, BorrarSala, sanitizeSalaInput } 
+export { findAllSalas, findOneSala, AgregarSala, ActualizarSala, BorrarSala, sanitizeSalaInput, ObtenerAsientosDeSala } 
