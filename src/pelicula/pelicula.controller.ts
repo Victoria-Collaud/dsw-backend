@@ -83,16 +83,30 @@ async function AgregarPelicula (req:Request, res:Response) {  //esta es solo par
 async function BorrarPelicula(req: Request, res: Response) { //esta es solo para admins
    try {
     const IdPelicula = Number(req.params.IdPelicula)
-    const pelicula = await em.findOne(Pelicula, { IdPelicula })
+     // Buscar la película
+    const pelicula = await em.findOne(Pelicula, { IdPelicula });
     if (!pelicula) {
-      return res.status(404).json({ mensaje: 'Película no encontrada' })
+      return res.status(404).json({ mensaje: 'Película no encontrada' });
     }
-    const funcionesAsociadas = await em.count(Funcion, { pelicula: { IdPelicula: IdPelicula } })
-    if (funcionesAsociadas > 0) {
-    return res.status(400).json({ 
-      mensaje: 'No se puede borrar la película porque tiene funciones asociadas' 
-    })
-  }
+    // Verificar si tiene funciones FUTURAS
+    const hoy = new Date();
+    const funcionesFuturas = await em.count(Funcion, {
+      pelicula: pelicula,
+      Fecha: { $gte: hoy } // Funciones desde hoy en adelante
+    });
+
+    if (funcionesFuturas > 0) {
+      return res.status(400).json({ 
+        mensaje: `No se puede eliminar la película porque tiene ${funcionesFuturas} función(es) programada(s) a futuro.` 
+      });
+    }
+    // Verificar si tiene funciones del pasado
+    const funcionesPasadas = await em.count(Funcion, { pelicula: pelicula });
+    if (funcionesPasadas > 0) {
+      return res.status(400).json({ 
+        mensaje: `No se puede eliminar la película porque tiene ${funcionesPasadas} función(es) en el historial.` 
+      });
+    }
     em.remove(pelicula)
     await em.flush()
     res.status(200).json({ mensaje: 'Pelicula borrada' })

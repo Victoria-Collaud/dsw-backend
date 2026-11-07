@@ -4,6 +4,7 @@ import { orm } from "../shared/db/orm.js"
 import { Pelicula } from "../pelicula/pelicula.entity.js";
 import { Sala } from "../sala/sala.entity.js";
 import { validarFechaFuncion } from './funcion.utils.js'; 
+import { Compra } from "../compra/compra.entity.js";
 
 const em = orm.em // entity manager
 
@@ -97,7 +98,18 @@ async function AgregarFuncion (req:Request, res:Response) {
 async function BorrarFuncion(req: Request, res: Response) { //esta es solo para admins
    try {
     const IdFuncion = Number(req.params.IdFuncion)
-    const funcion = em.getReference(Funcion, IdFuncion)
+     //Busca la función
+    const funcion = await em.findOne(Funcion, { IdFuncion });
+    if (!funcion) {
+      return res.status(404).json({ mensaje: 'Función no encontrada' });
+    }
+    //verifica si tiene compras asociadas
+    const comprasAsociadas = await em.count(Compra, { funcion: funcion });
+    if (comprasAsociadas > 0) {
+      return res.status(400).json({ 
+        mensaje: `No se puede eliminar la función porque tiene ${comprasAsociadas} entrada(s) vendida(s).` 
+      });
+    }
     em.remove(funcion)
     await em.flush()
     res.status(200).json({ mensaje: 'Función borrada' })

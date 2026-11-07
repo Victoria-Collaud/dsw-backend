@@ -2,6 +2,7 @@ import  { NextFunction, Request, Response} from "express";
 import { Sala } from "./sala.entity.js";
 import { orm } from "../shared/db/orm.js";
 import { generarAsientos } from './sala.utils.js';
+import { Funcion } from "../funcion/funcion.entity.js";
 
 const em = orm.em // entity manager
 
@@ -72,12 +73,29 @@ try {
 async function BorrarSala(req: Request, res: Response) {
    try {
     const NumSala = Number(req.params.NumSala)
-    const sala = em.getReference(Sala, NumSala)
-    em.remove(sala)
-    await em.flush()
-    res.status(200).json({ mensaje: 'Sala borrada' })
+    // Buscar la sala
+    const sala = await em.findOne(Sala, { NumSala });
+    if (!sala) {
+      return res.status(404).json({ mensaje: 'Sala no encontrada' });
+    }
+    // Verificar si tiene funciones FUTURAS
+    const hoy = new Date();
+    const funcionesFuturas = await em.count(Funcion, {
+      sala: sala,
+      Fecha: { $gte: hoy } // Busca funciones con fecha mayor o igual a hoy
+    });
+    if (funcionesFuturas > 0) {
+      return res.status(400).json({ 
+        mensaje: `No se puede eliminar la sala porque tiene ${funcionesFuturas} función(es) programada(s) a futuro.` 
+      });
+    }
+    // Si no tiene funciones futuras, borrar
+    em.remove(sala);
+    await em.flush();
+    return res.status(200).json({ mensaje: 'Sala borrada' });
+
   } catch (error: any) {
-    res.status(500).json({ mensaje: error.message })
+    res.status(500).json({ mensaje: error.message });
   }
 }
 
