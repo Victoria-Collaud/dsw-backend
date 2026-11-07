@@ -11,4 +11,4 @@ peliculaRouter.delete('/:IdPelicula', autenticar, autorizar('ADMIN'), BorrarPeli
 peliculaRouter.put('/:IdPelicula', sanitizePeliculaInput, autenticar, autorizar('ADMIN'), ActualizarPelicula)
 peliculaRouter.patch('/:IdPelicula', sanitizePeliculaInput, autenticar, autorizar('ADMIN'), ActualizarPelicula)
 peliculaRouter.patch('/:IdPelicula/estado', autenticar, autorizar('ADMIN'), CambiarEstadoPelicula);
-peliculaRouter.get('/activas', autenticar, findPeliculasActivas);
+peliculaRouter.get('/activas', findPeliculasActivas);
