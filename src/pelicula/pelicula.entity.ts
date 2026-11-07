@@ -13,7 +13,7 @@ export class Pelicula {
     @Property({ type: String,fieldName: 'titulo_pelicula' })
     TituloPelicula!: string
     
-    @Property({ type: String })
+    @Property({ type: Text })
     Sinopsis!: string
 
     @Property({ type: Number })
