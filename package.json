@@ -6,7 +6,7 @@
   "main": "app.js",
   "scripts": {
     "build": "tsc -p ./tsconfig.json",
-    "start": "node --env-file=.env ./dist/app.js",
+    "start": "node ./dist/app.js",
     "start:dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node --env-file=.env ./dist/app.js\"",
     "seed:admin": "node --env-file=.env ./dist/scripts/seedAdmin.js",
     "test": "vitest run",
