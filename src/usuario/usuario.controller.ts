@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'; 
 import { RolUsuario, Usuario } from './usuario.entity.js';
 import { orm } from '../shared/db/orm.js';
-import bcrypt from 'bcrypt'; //Migrar a Authprovider en frontend
+import bcrypt from 'bcryptjs'; //Migrar a Authprovider en frontend
 import jwt from 'jsonwebtoken';
 
 const em = orm.em

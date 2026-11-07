@@ -1,5 +1,5 @@
 import { Usuario, RolUsuario } from '../usuario/usuario.entity.js'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { orm } from '../shared/db/orm.js'
 
 async function seedAdmin() {

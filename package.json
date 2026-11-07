@@ -6,6 +6,7 @@
   "main": "app.js",
   "scripts": {
     "build": "tsc -p ./tsconfig.json",
+    "start": "node --env-file=.env ./dist/app.js",
     "start:dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node --env-file=.env ./dist/app.js\"",
     "seed:admin": "node --env-file=.env ./dist/scripts/seedAdmin.js",
     "test": "vitest run",
@@ -22,7 +23,7 @@
     }
   },
   "devDependencies": {
-    "@types/bcrypt": "^6.0.0",
+    "@types/bcryptjs": "^3.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
@@ -39,7 +40,7 @@
     "@mikro-orm/decorators": "7.2.1",
     "@mikro-orm/mysql": "7.2.1",
     "@mikro-orm/sql-highlighter": "1.0.1",
-    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
