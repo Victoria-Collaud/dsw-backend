@@ -36,9 +36,13 @@ app.use ((_, res) => {
 await syncSchema() //never in production
 
 //Avisa que funciona (?)
+/*
 app.listen(3001, () => { 
     console.log('Server is running on port 3001')}
 )
+*/
 
+const port = process.env.PORT || 3001;
+app.listen(port, () => console.log(`Server on port ${port}`));
 
 
