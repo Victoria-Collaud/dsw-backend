@@ -1,5 +1,5 @@
 import{Router} from 'express';
-import { sanitizePeliculaInput, findAllPeliculas, BuscarPorTitulo, BuscarPorGenero, AgregarPelicula, BorrarPelicula, ActualizarPelicula } from './pelicula.controller.js';
+import { sanitizePeliculaInput, findAllPeliculas, BuscarPorTitulo, BuscarPorGenero, AgregarPelicula, BorrarPelicula, ActualizarPelicula, CambiarEstadoPelicula, findPeliculasActivas } from './pelicula.controller.js';
 import { autenticar, autorizar } from '../middlewares/auth.middleware.js';
 
 export const peliculaRouter = Router()
@@ -10,3 +10,5 @@ peliculaRouter.post('/', sanitizePeliculaInput, autenticar, autorizar('ADMIN'), 
 peliculaRouter.delete('/:IdPelicula', autenticar, autorizar('ADMIN'), BorrarPelicula)
 peliculaRouter.put('/:IdPelicula', sanitizePeliculaInput, autenticar, autorizar('ADMIN'), ActualizarPelicula)
 peliculaRouter.patch('/:IdPelicula', sanitizePeliculaInput, autenticar, autorizar('ADMIN'), ActualizarPelicula)
+peliculaRouter.patch('/:IdPelicula/estado', autenticar, autorizar('ADMIN'), CambiarEstadoPelicula);
+peliculaRouter.get('/activas', autenticar, findPeliculasActivas);

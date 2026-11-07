@@ -31,6 +31,9 @@ export class Pelicula {
     @Property({ type: String })
     Trailer!: string
 
+    @Property({ type: Boolean, default: true })
+    Activa!: boolean;
+
     constructor(
         TituloPelicula: string,
         Sinopsis: string,
@@ -38,7 +41,8 @@ export class Pelicula {
         Clasificacion: string,
         genero: Genero,
         Cartelera: string,
-        Trailer: string
+        Trailer: string,
+        Activa: boolean = true
     ) {
         this.TituloPelicula = TituloPelicula
         this.Sinopsis = Sinopsis
@@ -47,5 +51,6 @@ export class Pelicula {
         this.genero = genero
         this.Cartelera = Cartelera
         this.Trailer = Trailer
+        this.Activa = Activa
     }
 }

@@ -16,6 +16,18 @@ try {
   }
 }
 
+async function findPeliculasActivas (req:Request, res:Response) {
+  try {
+    // Filtramos solo las activas
+    const peliculas = await em.find(Pelicula, { Activa: true }, {
+      populate: ['genero']
+    });
+    return res.status(200).json({ data: peliculas });
+  } catch (error: any) {
+    res.status(500).json({ mensaje: error.message });
+  }
+}
+
 async function BuscarPorTitulo(req: Request, res: Response) {
     try {
     // Obtenemos el texto ingresado en la URL (por ejemplo: /api/peliculas/padrino)
@@ -70,7 +82,8 @@ async function AgregarPelicula (req:Request, res:Response) {  //esta es solo par
       Clasificacion,
       genero,  // Pasamos el objeto no el número
       Cartelera,
-      Trailer
+      Trailer,
+      true // peli activa por defecto
     )
     em.persist(nuevaPelicula)
     await em.flush()
@@ -147,5 +160,24 @@ async function ActualizarPelicula(req: Request, res: Response) {
   }
 }
 
+async function CambiarEstadoPelicula(req: Request, res: Response) {
+  try {
+    const IdPelicula = Number(req.params.IdPelicula);
+    const pelicula = await em.findOne(Pelicula, { IdPelicula });
+    if (!pelicula) {
+      return res.status(404).json({ mensaje: 'Película no encontrada' });
+    }
+    // Cambiamos el estado (invierte el valor actual)
+    pelicula.Activa = !pelicula.Activa;
+    await em.flush();
+    return res.status(200).json({ 
+      mensaje: pelicula.Activa ? 'Película reactivada' : 'Película archivada',
+      data: pelicula 
+    });
+  } catch (error: any) {
+    res.status(500).json({ mensaje: error.message });
+  }
+}
 
-export { sanitizePeliculaInput, findAllPeliculas, BuscarPorTitulo, BuscarPorGenero, AgregarPelicula, BorrarPelicula, ActualizarPelicula }
+
+export { sanitizePeliculaInput, findAllPeliculas, BuscarPorTitulo, BuscarPorGenero, AgregarPelicula, BorrarPelicula, ActualizarPelicula, findPeliculasActivas, CambiarEstadoPelicula }

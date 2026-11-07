@@ -4,7 +4,7 @@ import { Compra } from "./compra.entity.js"
 import { Funcion } from "../funcion/funcion.entity.js"
 import { EntityManager, LockMode } from "@mikro-orm/core";
 import { Usuario } from "../usuario/usuario.entity.js";
-import { randomUUID } from "crypto"; //temporal
+import { randomUUID } from "crypto"; 
 import Qrcode from "qrcode";
 import { AuthRequest } from '../middlewares/auth.middleware.js';
 

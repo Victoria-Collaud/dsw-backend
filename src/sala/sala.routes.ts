@@ -10,4 +10,4 @@ salarouter.post('/', sanitizeSalaInput, autenticar, autorizar('ADMIN'), AgregarS
 salarouter.put('/:NumSala', sanitizeSalaInput, autenticar, autorizar('ADMIN'), ActualizarSala)
 salarouter.patch('/:NumSala', sanitizeSalaInput, autenticar, autorizar('ADMIN'), ActualizarSala)
 salarouter.delete('/:NumSala', autenticar, autorizar('ADMIN'), BorrarSala)
-salarouter.get('/:NumSala/asientos', autenticar, autorizar('ADMIN'), ObtenerAsientosDeSala)
+salarouter.get('/:NumSala/asientos', autenticar, ObtenerAsientosDeSala)
