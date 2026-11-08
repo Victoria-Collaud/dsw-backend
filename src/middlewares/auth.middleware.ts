@@ -19,7 +19,7 @@ function autenticar(req: AuthRequest, res: Response, next: NextFunction) {
     req.user = payload;
     next();
   } catch (error) {
-    return res.status(403).json({ mensaje: 'Token inválido o expirado' }); // 403: credenciales inválidas [citation:1]
+    return res.status(401).json({ mensaje: 'Token inválido o expirado' }); // 401 si el token es inválido o expirado
   }
 }
 
