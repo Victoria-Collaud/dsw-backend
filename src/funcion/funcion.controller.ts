@@ -45,26 +45,25 @@ try {
   } 
 } 
 
-//falta comprobación de que el horario en esa sala esté disponible
 async function AgregarFuncion (req:Request, res:Response) { 
     try {
     const { Idioma, Fecha, Horario, IdPelicula, NumSala } = req.body
-    // Busca la película en la BD
+    //busca la película 
     const pelicula = await em.findOne(Pelicula, { IdPelicula: IdPelicula })
     if (!pelicula) {
       return res.status(404).json({ mensaje: 'La película no existe' })
     }
-    //busca la sala en la BD
+    //busca la sala 
     const sala = await em.findOne(Sala, { NumSala: NumSala })
     if (!sala) {
       return res.status(404).json({ mensaje: 'La sala no existe' })
     }
-    // Validar la fecha y hora de la función
+    // valida la fecha y hora de la función
     const validacion = validarFechaFuncion(Fecha, Horario);
     if (!validacion.ok) {
       return res.status(400).json({ mensaje: validacion.mensaje });
     }
-     // Convertimos el string a un objeto Date válido antes de buscar colisiones y guardar
+     // convertimos el string a un objeto Date válido antes de buscar colisiones y guardar
     const fechaString = Fecha.split('T')[0]; // Extrae "2026-11-20" por si viene con hora
     const fechaHora = new Date(`${fechaString}T${Horario}:00`); 
      // Verificar que la sala esté libre en esa fecha y horario

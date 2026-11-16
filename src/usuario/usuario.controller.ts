@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'; 
 import { RolUsuario, Usuario } from './usuario.entity.js';
 import { orm } from '../shared/db/orm.js';
-import bcrypt from 'bcryptjs'; //Migrar a Authprovider en frontend
+import bcrypt from 'bcryptjs'; 
 import jwt from 'jsonwebtoken';
 
 const em = orm.em
@@ -62,9 +62,9 @@ async function registrarUsuario(req: Request, res: Response) {
       if (!esValida) return res.status(401).json({ mensaje: 'contraseña incorrecta' });
 
       const token = jwt.sign(
-      { idUsuario: usuario.IdUsuario, rol: usuario.rol },  // Payload
+      { idUsuario: usuario.IdUsuario, rol: usuario.rol, email: usuario.EmailUsuario },  // Payload
       process.env.JWT_SECRET!,                      // Secreto
-      { expiresIn: '1h' }                           // Expiración
+      { expiresIn: '15min' }                           // Expiración
     )
      const { ContrasenaHash, ...usuarioSeguro } = usuario
 
